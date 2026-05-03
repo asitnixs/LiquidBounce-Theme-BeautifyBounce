@@ -45,7 +45,7 @@
         </div>
 
         {#if expanded}
-            <div class="options" transition:slide={{ duration: 150 }}>
+            <div class="options" transition:slide={{ duration: 300 }}>
                 {#each options as o (o)}
                     <div
                         class="option"
