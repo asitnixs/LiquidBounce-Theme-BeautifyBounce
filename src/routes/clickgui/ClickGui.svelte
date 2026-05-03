@@ -5,7 +5,7 @@
     import { getModules, setTyping } from "../../integration/rest";
     import { groupByCategory } from "../../integration/util";
     import { listen } from "../../integration/ws";
-    import type { ModuleToggleEvent } from "../../integration/events";
+    import type { ModuleToggleEvent, VirtualScreenEvent } from "../../integration/events";
     import ModuleCard from "./ModuleCard.svelte";
     import Description from "./Description.svelte";
     import IntroOverlay from "./IntroOverlay.svelte";
@@ -150,6 +150,20 @@
         }
     });
 
+    listen("virtualScreen", async (e: VirtualScreenEvent) => {
+        if (e.action === "close") {
+            searchQuery = "";
+            searchOpen = false;
+            await setTyping(false);
+        }
+    });
+
+    onDestroy(() => {
+        searchQuery = "";
+        searchOpen = false;
+        setTyping(false).catch(() => {});
+    });
+
     let displayedModules = $derived.by(() => {
         if (!modules.length) return [];
         
@@ -266,6 +280,52 @@
             }
         };
     }
+
+    function smoothScroll(node: HTMLElement, resetTrigger?: string) {
+        let targetY = node.scrollTop;
+        let isAnimating = false;
+        let animFrameId: number;
+
+        const updateScroll = () => {
+            const dy = targetY - node.scrollTop;
+            if (Math.abs(dy) < 0.5) {
+                node.scrollTop = targetY;
+                isAnimating = false;
+                return;
+            }
+            node.scrollTop += dy * 0.10;
+            animFrameId = requestAnimationFrame(updateScroll);
+        };
+
+        const onWheel = (e: WheelEvent) => {
+            if (node.scrollHeight > node.clientHeight) {
+                e.preventDefault();
+                if (!isAnimating) targetY = node.scrollTop;
+                
+                targetY = Math.max(0, Math.min(node.scrollHeight - node.clientHeight, targetY + e.deltaY));
+                
+                if (!isAnimating) {
+                    isAnimating = true;
+                    animFrameId = requestAnimationFrame(updateScroll);
+                }
+            }
+        };
+
+        node.addEventListener('wheel', onWheel, { passive: false });
+        
+        return {
+            update(newTrigger?: string) {
+                cancelAnimationFrame(animFrameId);
+                node.scrollTop = 0;
+                targetY = 0;
+                isAnimating = false;
+            },
+            destroy() {
+                node.removeEventListener('wheel', onWheel);
+                cancelAnimationFrame(animFrameId);
+            }
+        };
+    }
 </script>
 
 <svelte:window onclick={handleWindowClick} onmousemove={handleMouseMove} onmouseup={handleMouseUp} />
@@ -289,7 +349,7 @@
                         <AboutPanel onClose={() => aboutOpen = false} iconFilter={iconFilter} />
                     {/if}
 
-                    <nav class="categories">
+                    <nav class="categories" use:smoothScroll>
                         {#each categoryNames as cat}
                             <button class="category-btn" class:active={activeCategory === cat && !searchQuery} onclick={() => setCategory(cat)}>
                                 <ClickGuiToolTip text={cat} placement="left" />
@@ -406,6 +466,13 @@
                                     bind:this={searchInputEl}
                                     onfocusin={async () => await setTyping(true)}
                                     onfocusout={async () => await setTyping(false)}
+                                    onkeydown={async (e) => {
+                                        if (e.key === "Escape") {
+                                            searchQuery = "";
+                                            searchOpen = false;
+                                            await setTyping(false);
+                                        }
+                                    }}
                                     spellcheck="false"
                                 />
                             </div>
@@ -422,7 +489,7 @@
                 <Changelog />
 
                 {:else}
-                <div class="modules-grid">
+                <div class="modules-grid" use:smoothScroll={activeCategory + searchQuery}>
                     {#key activeCategory + searchQuery + refreshCounter}
                         {#if displayedModules.length === 0}
                             <div class="no-results">No modules found :(</div>
