@@ -19,9 +19,9 @@ BeautifyBounce
 | :---: | :---: |
 | ![Menu](screenshots/menu.png) | ![HUD](screenshots/hud.png) |
 
-| ClickGui | |
-| :---: | :---: |
-| ![ClickGUI](screenshots/clickgui.png)
+| ClickGui |
+| :---: |
+| ![ClickGUI](screenshots/clickgui.png) |
 
 ---
 
