@@ -1,17 +1,33 @@
-# LiquidBounce Default Theme
+<p align="center">
+BeautifyBounce
 
-This repository contains the source code for the LiquidBounce Default Theme, built using [Svelte](https://svelte.dev/). 
-It is intended for development, customization, and distribution through the LiquidBounce theme system and marketplace.
+<p align="center">
+  <img src="public/img/lb-logo.svg" width="200" alt="Logo">
+  <br>
+  <b>Just a beautiful and smooth theme for LiquidBounce</b>
+  <br>
+  <b>(Too lazy to make my own logo for theme so i used default logo)</b>
+</p>
 
 ---
 
-## Getting Started with a Custom Theme
+## 📸 Screenshots
 
-If you want to create your own LiquidBounce theme, the recommended starting point is to **fork the official default theme repository**:
+> **Visual Showcase:**
 
-https://github.com/CCBlueX/LiquidBounce-Theme
+| Main Menu | In-Game HUD |
+| :---: | :---: |
+| ![Menu](screenshots/menu.png) | ![HUD](screenshots/hud.png) |
 
-Forking this repository gives you a fully working baseline with proper project structure, build configuration, and marketplace integration already set up. From there, you can modify the UI, styles, and components to create your own custom theme while staying compatible with LiquidBounce’s theming system.
+| ClickGUI |
+| :---: | :---: |
+| ![GUI](screenshots/clickgui.png) |
+
+---
+
+<p align="center">
+  Designed and Developed by <b>asitnixs</b>
+</p>
 
 ---
 
