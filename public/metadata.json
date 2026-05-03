@@ -1,8 +1,8 @@
 {
-  "id": "liquidbounce",
-  "name": "LiquidBounce",
-  "version": "0.1.0",
-  "authors": ["CCBlueX"],
+  "id": "BeautifyBounce",
+  "name": "BeautifyBounce",
+  "version": "1.0.0",
+  "authors": ["asitnix"],
   "colors": {
     "Accent": "#4677ff",
     "Tint": "#000000"
