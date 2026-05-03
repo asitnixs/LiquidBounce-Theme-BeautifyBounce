@@ -18,9 +18,11 @@
     import TabbedClickGui from "./routes/clickgui/TabbedClickGui.svelte";
     import {intToRgba, rgbaToHex} from "./integration/util";
     import type {ThemeColorChangeEvent} from "./integration/events";
+    import HudEditor from "./routes/hudeditor/HudEditor.svelte";
 
     const routes = {
         "/clickgui": TabbedClickGui,
+        "/hudeditor": HudEditor,
         "/hud": Hud,
         "/inventory": Inventory,
         "/title": Title,
@@ -54,11 +56,17 @@
     }
 
     function applyAccentColor(color: number) {
-        setThemeColor("accent-color", themeColorToHex(color));
+        if (localStorage.getItem("custom_accent_color")) return;
+
+        const hexColor = themeColorToHex(color);
+        setThemeColor("accent-color", hexColor);
+        localStorage.setItem("cached_accent_color", hexColor);
     }
 
     function applyTintColor(defaultSurfaceColor: string, color: number) {
-        setThemeColor("surface-color", mixColors(defaultSurfaceColor, themeColorToHex(color), SURFACE_TINT_MIX));
+        const hexColor = mixColors(defaultSurfaceColor, themeColorToHex(color), SURFACE_TINT_MIX);
+        setThemeColor("surface-color", hexColor);
+        localStorage.setItem("cached_surface_color", hexColor);
     }
 
     onMount(async () => {
@@ -68,9 +76,28 @@
         let theme = await getTheme(metadata.id);
 
         applyAccentColor(theme.colors.accent);
+
+        const customColor = localStorage.getItem("custom_accent_color");
+        if (customColor) {
+            setThemeColor("accent-color", customColor);
+        }
+        
         applyTintColor(defaultSurfaceColor, theme.colors.tint);
 
+        const savedTheme = localStorage.getItem("liquidbounce_selected_theme") || "dark";
+        document.documentElement.classList.add(`clickgui-theme-${savedTheme}`);
+
         await insertPersistentData();
+
+        window.addEventListener("storage", (e) => {
+            if (e.key === "custom_accent_color" && e.newValue) {
+                setThemeColor("accent-color", e.newValue);
+            }
+            if (e.key === "liquidbounce_selected_theme" && e.newValue) {
+                document.documentElement.classList.remove("clickgui-theme-light", "clickgui-theme-dark");
+                document.documentElement.classList.add(`clickgui-theme-${e.newValue}`);
+            }
+        });
 
         listenAlways("themeColorChange", async (event: ThemeColorChangeEvent) => {
             if (event.themeId !== metadata?.id) {

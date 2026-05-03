@@ -5,11 +5,8 @@
     import {createEventDispatcher} from "svelte";
 
     export let setting: ModuleSetting;
-
     const cSetting = setting as FileSetting;
-
     let selecting = false;
-
     const dispatch = createEventDispatcher();
 
     function handleChange() {
@@ -18,17 +15,9 @@
     }
 
     async function selectFile() {
-        if (selecting) {
-            return;
-        }
-
+        if (selecting) return;
         selecting = true;
-
-        let file = await openFileDialog({
-            mode: cSetting.dialogMode,
-            supportedExtensions: cSetting.supportedExtensions
-        });
-
+        let file = await openFileDialog({ mode: cSetting.dialogMode, supportedExtensions: cSetting.supportedExtensions });
         selecting = false;
         if (file.file !== undefined) {
             cSetting.value = file.file;
@@ -43,68 +32,90 @@
 </script>
 
 <div class="setting">
-    <div class="name">{spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
+    <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
 
     <div class="body">
-        <button class="button-select" on:click={selectFile}>{cSetting.value === "" ? "<empty>" : cSetting.value}</button>
+        <button class="button-select" on:click={selectFile}>
+            {cSetting.value === "" ? "Click to select file" : cSetting.value}
+        </button>
 
         {#if cSetting.value !== ""}
-            <button class="button-action" on:click={resetFile}>
-                <img class="icon" src="img/clickgui/icon-reset.svg" alt="reset-file" title="Reset" />
+            <button class="button-action reset" on:click={resetFile} title="Clear">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-
-            <button class="button-action" on:click={() => browsePath(cSetting.value)}>
-                <img class="icon" src="img/clickgui/icon-open-file.svg" alt="open-file" title="Open" />
+            <button class="button-action open" on:click={() => browsePath(cSetting.value)} title="Open Folder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
             </button>
         {/if}
     </div>
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 7px 0;
+    padding: 6px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
   .name {
     font-weight: 500;
     color: var(--clickgui-text-color);
     font-size: 12px;
-    margin-bottom: 5px;
   }
 
   .body {
     display: flex;
-    column-gap: 5px;
-  }
-
-  .button-action {
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    align-items: center;
-
-    .icon {
-      height: 18px;
-    }
+    gap: 6px;
+    width: 100%;
   }
 
   .button-select {
-    cursor: pointer;
-    width: 100%;
-    background-color: var(--clickgui-input-background-color);
-    font-family: monospace;
-    font-size: 12px;
+    flex: 1;
+    background: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 8px;
+    padding: 6px 8px;
     color: var(--clickgui-text-dimmed-color);
-    border: none;
-    border-bottom: solid 2px var(--clickgui-input-border-color);
-    padding: 6px;
-    border-radius: 3px;
-    transition: ease border-color .2s;
-
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    direction: rtl;
+    transition: all 0.4s;
+
+    &:hover {
+        border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+        color: var(--clickgui-text-color);
+    }
+  }
+
+  .button-action {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--clickgui-text-dimmed-color);
+    transition: all 0.4s;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    &.open:hover {
+        background-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
+
+    &.reset:hover {
+        background-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
   }
 </style>

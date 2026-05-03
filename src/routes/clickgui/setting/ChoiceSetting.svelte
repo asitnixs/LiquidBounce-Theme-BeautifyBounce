@@ -67,25 +67,28 @@
 </div>
 
 <style lang="scss">
-
     .setting {
-        padding: 7px 0px;
+        padding: 6px 0;
 
         .head {
-          transition: ease margin-bottom .2s;
-
+          transition: ease margin-bottom 0.4s;
           &.expand {
               display: grid;
               grid-template-columns: 1fr max-content;
+              align-items: center;
+              gap: 4px;
           }
 
           &.expanded {
-              margin-bottom: 10px;
+              margin-bottom: 8px;
           }
         }
     }
+    
     .nested-settings {
-        border-left: solid 2px var(--clickgui-setting-group-border-color);
-        padding-left: 7px;
+        padding: 4px 10px;
+        background-color: var(--clickgui-window-background-color);
+        border: 1px solid var(--clickgui-border-color);
+        border-radius: 8px;
     }
 </style>

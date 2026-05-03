@@ -9,18 +9,12 @@
 
     let sortableElement: HTMLElement | undefined;
 
-    interface MenuListSortEvent {
-        newOrder: number[]
-    }
+    interface MenuListSortEvent { newOrder: number[] }
 
-    const dispatch = createEventDispatcher<{
-        sort: MenuListSortEvent
-    }>();
+    const dispatch = createEventDispatcher<{ sort: MenuListSortEvent }>();
 
     function handleChange(e: any) {
-        dispatch("sort", {
-            newOrder: calculateNewOrder(e.oldIndex, e.newIndex, elementCount)
-        });
+        dispatch("sort", { newOrder: calculateNewOrder(e.oldIndex, e.newIndex, elementCount) });
     }
 
     function calculateNewOrder(oldIndex: number, newIndex: number, length: number): number[] {
@@ -44,12 +38,12 @@
 </div>
 
 <style lang="scss">
-
   .menu-list {
-    background-color: var(--menu-button-container-background-color);
+    background: color-mix(in srgb, var(--clickgui-base-color) 90%, transparent);
     flex: 1;
-    border-radius: 5px;
-    margin-bottom: 25px;
+    border-radius: 14px;
+    margin-bottom: 80px;
     position: relative;
+    overflow: hidden;
   }
 </style>

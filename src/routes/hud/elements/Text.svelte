@@ -75,7 +75,7 @@
 <style lang="scss">
 
     .text {
-        position: absolute;
+        position: relative;
         white-space: nowrap;
         user-select: none;
         pointer-events: none;

@@ -15,7 +15,6 @@
 
     function showFallbackIcon(event: Event) {
         const img = event.currentTarget as HTMLImageElement;
-
         showingFallbackImage = true;
         img.src = itemTextureUrl("minecraft:grass_block");
     }
@@ -23,50 +22,78 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="item" class:has-icon={icon !== undefined}
-     on:click={() => dispatch("toggle", {enabled: !enabled, value:value})}>
+<div class="item" class:enabled on:click={() => dispatch("toggle", {enabled: !enabled, value:value})}>
+
     {#if icon}
-        <img class="icon" class:fallback={showingFallbackImage} src="{icon}" alt={value} on:error={showFallbackIcon}/>
+        <img class="mc-icon" class:fallback={showingFallbackImage} src="{icon}" alt={value} on:error={showFallbackIcon}/>
     {/if}
-    <div class="name">{name}</div>
-    <div class="tick">
+
+    <div class="check-icon">
         {#if enabled}
-            <img src="img/clickgui/icon-tick-checked.svg" alt="enabled">
-        {:else}
-            <img src="img/clickgui/icon-tick.svg" alt="disabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
         {/if}
     </div>
+    
+    <div class="name">{name}</div>
+
 </div>
 
 <style lang="scss">
-
   .item {
-    display: grid;
-    grid-template-columns: 1fr max-content;
+    display: flex;
     align-items: center;
-    column-gap: 5px;
+    gap: 8px;
+    padding: 8px 12px;
     cursor: pointer;
-    margin: 2px 5px 2px 0;
+    transition: background 0.4s ease;
+    border-radius: 8px;
 
-    &.has-icon {
-      grid-template-columns: max-content 1fr max-content;
+    &:hover { 
+      background: var(--clickgui-window-background-color); 
     }
   }
 
-  .icon {
-    height: 25px;
-    width: 25px;
+  .check-icon {
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    svg {
+      width: 14px;
+      height: 14px;
+      color: var(--clickgui-text-color);
+    }
+  }
 
-    &.fallback {
-      filter: grayscale(1);
+  .mc-icon {
+    height: 20px;
+    width: 20px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+
+    &.fallback { 
+      filter: grayscale(1); 
+      opacity: 0.4; 
     }
   }
 
   .name {
-    font-size: 12px;
-    color: var(--clickgui-text-color);
-    text-overflow: ellipsis;
+    flex: 1;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--clickgui-text-dimmed-color);
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.4s ease;
+  }
+
+  .item.enabled .name {
+    color: var(--clickgui-text-color);
   }
 </style>

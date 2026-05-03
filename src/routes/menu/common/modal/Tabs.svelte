@@ -37,34 +37,42 @@
 </div>
 
 <style lang="scss">
-
   .available-tabs {
     display: flex;
-    column-gap: 10px;
-    margin-bottom: 40px;
+    background: var(--clickgui-window-background-color);
+    padding: 6px;
+    border-radius: 14px;
+    margin-bottom: 20px;
   }
 
   .tab-button {
-    font-family: "Inter", sans-serif;
-    background-color: var(--menu-modal-tab-background-color);
-    color: var(--menu-text-color);
-    padding: 10px;
-    border: solid 2px transparent;
-    border-radius: 5px;
+    background-color: transparent;
+    color: var(--clickgui-text-dimmed-color);
+    padding: 14px 10px;
+    border: none;
+    border-radius: 12px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 10px;
     cursor: pointer;
-    transition: ease border-color .2s;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    font-weight: 500;
 
     .icon {
-      height: 30px;
+      height: 24px;
+    }
+
+    &:hover:not(.active) {
+      background-color: var(--clickgui-base-color);
+      color: var(--clickgui-text-color);
     }
 
     &.active {
-      border-color: var(--menu-modal-tab-active-border-color);
+      background-color: color-mix(in srgb, var(--accent-color) 80%, transparent);
+      color: var(--clickgui-text-color);
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--accent-color) 40%, transparent);
     }
   }
 </style>

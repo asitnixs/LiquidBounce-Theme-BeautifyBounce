@@ -8,19 +8,11 @@
     import SwitchBindAction from "./SwitchBindAction.svelte";
     import {isClickGuiScreen, UNKNOWN_KEY} from "../../../../util/utils";
 
-    /**
-     * https://www.glfw.org/docs/3.3/group__keys.html
-     */
     const KEY_TOKEN_TO_MODIFIERS: Record<number, BindModifier> = {
-        340: "Shift", 344: "Shift",
-        341: "Control", 345: "Control",
-        342: "Alt", 346: "Alt",
-        343: "Super", 347: "Super",
+        340: "Shift", 344: "Shift", 341: "Control", 345: "Control",
+        342: "Alt", 346: "Alt", 343: "Super", 347: "Super",
     } as const;
 
-    /**
-     * From Minecraft InputUtil.Type
-     */
     const KEY_CODE_TO_MODIFIERS: Record<string, BindModifier> = {
         "key.keyboard.left.shift": "Shift", "key.keyboard.right.shift": "Shift",
         "key.keyboard.left.control": "Control", "key.keyboard.right.control": "Control",
@@ -29,105 +21,58 @@
     } as const;
 
     export let setting: ModuleSetting;
-
     const cSetting = setting as BindSetting;
-
     const dispatch = createEventDispatcher();
+
+    export let hideAction: boolean = false;
 
     let isHovered = false;
     let binding = false;
+    let addedModifiers = new Set<BindModifier>();
+    let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
-    /**
-     * Gets the next possible event which can be used as a bind.
-     */
     const nextBindEvent = () => Promise.any([
-        waitMatches("mouseButton", (e: MouseButtonEvent) =>
-            isClickGuiScreen(e.screen) && !(e.button === 0 /* LMB */ && isHovered)
-        ),
-        waitMatches("keyboardKey", (e: KeyboardKeyEvent) =>
-            isClickGuiScreen(e.screen)
-        ),
+        waitMatches("mouseButton", (e: MouseButtonEvent) => isClickGuiScreen(e.screen) && !(e.button === 0 && isHovered)),
+        waitMatches("keyboardKey", (e: KeyboardKeyEvent) => isClickGuiScreen(e.screen)),
     ]);
 
-    let addedModifiers = new Set<BindModifier>();
-
-    /**
-     * Tries to handle the event. If it's consumed
-     * @return undefined if it's not a modifier, or else its key name and parsed modifier
-     */
     const handleBindEventIfNotModifier = (event: MouseButtonEvent | KeyboardKeyEvent) => {
         if (Object.hasOwn(event, "keyCode")) {
             const e = event as KeyboardKeyEvent;
-            if (e.keyCode === 256 /* GLFW_KEY_ESCAPE */) {
-                handleActionChange(UNKNOWN_KEY);
-                return;
-            }
-
+            if (e.keyCode === 256) { handleActionChange(UNKNOWN_KEY); return; }
             const modifier = KEY_TOKEN_TO_MODIFIERS[e.keyCode];
-
-            if (!modifier) {
-                handleActionChange(e.key);
-                return;
-            }
-
+            if (!modifier) { handleActionChange(e.key); return; }
             return {key: e.key, keyCode: e.keyCode, modifier};
         } else if (Object.hasOwn(event, "button")) {
             const e = event as MouseButtonEvent;
             handleActionChange(e.key);
-        } else {
-            throw new Error("Unexcepted event: " + JSON.stringify(event));
         }
     }
 
-    let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
-
-    onDestroy(() => {
-        if (timeout !== undefined) {
-            clearTimeout(timeout);
-        }
-    });
+    onDestroy(() => { if (timeout !== undefined) clearTimeout(timeout); });
 
     async function toggleBinding() {
-        // Binding progress -> cancel it
-        if (binding) {
-            handleActionChange(UNKNOWN_KEY);
-            return;
-        }
-
+        if (binding) { handleActionChange(UNKNOWN_KEY); return; }
         binding = true;
 
         let event = await nextBindEvent();
-        // Promise doesn't support cancellation, so we need manual check
         if (!binding) return;
-
         let result = handleBindEventIfNotModifier(event);
 
         while (result) {
-            if (timeout !== undefined) {
-                clearTimeout(timeout);
-            }
+            if (timeout !== undefined) clearTimeout(timeout);
             const {key, modifier} = result;
-
             addedModifiers.add(modifier);
-            addedModifiers = addedModifiers; // Trigger reactive update
-
-            timeout = setTimeout(() => {
-                if (binding) {
-                    handleActionChange(key);
-                }
-                timeout = undefined;
-            }, 1000);
-
+            addedModifiers = addedModifiers;
+            timeout = setTimeout(() => { if (binding) handleActionChange(key); timeout = undefined; }, 1000);
             event = await nextBindEvent();
-
             if (!binding) return;
-
             result = handleBindEventIfNotModifier(event);
         }
     }
 
     function handleActionChange(newBoundKey: string) {
-        addedModifiers.delete(KEY_CODE_TO_MODIFIERS[newBoundKey]); // We don't want Shift+RIGHT_SHIFT
+        addedModifiers.delete(KEY_CODE_TO_MODIFIERS[newBoundKey]);
         cSetting.value.boundKey = newBoundKey;
         cSetting.value.modifiers = Array.from(addedModifiers);
         addedModifiers.clear();
@@ -139,79 +84,96 @@
         setting = {...cSetting};
         dispatch("change");
     }
+
+    export let moduleName: string = "";
+
+    function getHidden(): Set<string> {
+        try { return new Set(JSON.parse(localStorage.getItem("keybinds_hidden") ?? "[]")); }
+        catch { return new Set(); }
+    }
+
+    let hidden = getHidden().has(moduleName);
+
+    function toggleHidden() {
+        const set = getHidden();
+        if (set.has(moduleName)) set.delete(moduleName);
+        else set.add(moduleName);
+        localStorage.setItem("keybinds_hidden", JSON.stringify([...set]));
+        hidden = set.has(moduleName);
+        window.dispatchEvent(new Event("keybinds-hidden-change"));
+    }
 </script>
 
-<div class="setting" class:has-value={cSetting.value.boundKey !== UNKNOWN_KEY}>
-    <button
-            class="change-bind"
-            on:click={toggleBinding}
-            on:mouseenter={() => isHovered = true}
-            on:mouseleave={() => isHovered = false}
-    >
-        <span class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</span>
-
-        {#if cSetting.value.boundKey !== UNKNOWN_KEY}
-            <div class="action">
-                <SwitchBindAction
-                        choices={["Toggle", "Hold", "Smart"]}
-                        bind:chosen={cSetting.value.action}
-                        onchange={handleChange}
-                />
-            </div>
+<div class="setting-row">
+    <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
+    
+    <div class="controls">
+        {#if cSetting.value.boundKey !== UNKNOWN_KEY && !hideAction}
+            <SwitchBindAction choices={["Toggle", "Hold", "Smart"]} bind:chosen={cSetting.value.action} onchange={handleChange} />
         {/if}
 
-        <span class="bind">
+        <button class="bind-btn" class:binding on:click={toggleBinding} on:mouseenter={() => isHovered = true} on:mouseleave={() => isHovered = false}>
             {#if !binding}
-                <BindDisplay
-                        bind:modifiers={cSetting.value.modifiers}
-                        bind:boundKey={cSetting.value.boundKey}
-                />
+                <BindDisplay bind:modifiers={cSetting.value.modifiers} bind:boundKey={cSetting.value.boundKey} />
             {:else if addedModifiers.size}
-                <BindDisplay
-                        bind:modifiers={addedModifiers}
-                        boundKey="..."
-                        literal={true}
-                />
+                <BindDisplay bind:modifiers={addedModifiers} boundKey="..." literal={true} />
             {:else}
-                <span>Press any key...</span>
+                <span class="listening">...</span>
             {/if}
-        </span>
-    </button>
+        </button>
+    </div>
 </div>
 
 <style lang="scss">
+  .setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+  }
 
   .name {
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .action {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-  }
-
-  .bind {
-    display: flex;
-    justify-content: center;
-  }
-
-  .setting {
-    padding: 7px 0;
-  }
-
-  .change-bind {
-    background-color: transparent;
-    border: solid 2px var(--accent-color);
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 4px;
-    font-weight: 500;
-    color: var(--clickgui-text-color);
     font-size: 12px;
-    font-family: "Inter", sans-serif;
-    width: 100%;
-    position: relative;
+    font-weight: 500;
+    color: var(--clickgui-text-dimmed-color);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bind-btn {
+    all: unset;
+    background: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    padding: 4px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--clickgui-text-color);
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
+
+    &.binding {
+      border-color: color-mix(in srgb, var(--accent-color) 60%, transparent);
+    }
+  }
+
+  .listening {
+    animation: pulse 1s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
   }
 </style>

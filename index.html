@@ -5,10 +5,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiquidBounce UI</title>
-    <link rel="preload" href="/fonts/Inter-Bold.ttf" as="font" crossorigin="anonymous">
-    <link rel="preload" href="/fonts/Inter-Medium.ttf" as="font" crossorigin="anonymous">
-    <link rel="preload" href="/fonts/Inter-Regular.ttf" as="font" crossorigin="anonymous">
-    <link rel="preload" href="/fonts/Inter-Light.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/SF/SF-Pro-Text-Bold.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/SF/SF-Pro-Text-Medium.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/SF/SF-Pro-Text-Regular.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/SF/SF-Pro-Text-Light.ttf" as="font" crossorigin="anonymous">
+
+    <script>
+        (function() {
+            try {
+                var accent = localStorage.getItem("custom_accent_color") || localStorage.getItem("cached_accent_color");
+                if (accent) {
+                    document.documentElement.style.setProperty('--accent-color', accent);
+                }
+
+                var theme = localStorage.getItem("liquidbounce_selected_theme"); 
+                if (theme) {
+                    document.documentElement.classList.add("clickgui-theme-" + theme);
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 
 <body>

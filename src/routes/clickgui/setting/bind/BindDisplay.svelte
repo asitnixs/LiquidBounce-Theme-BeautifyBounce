@@ -10,14 +10,28 @@
 
     let printableKeyName: string | undefined;
 
+    function abbreviateKeyName(name: string | undefined): string | undefined {
+        if (!name) return name;
+        return name
+            .replace(/Right Shift/i, "RShift")
+            .replace(/Left Shift/i, "LShift")
+            .replace(/Right Control/i, "RCtrl")
+            .replace(/Left Control/i, "LCtrl")
+            .replace(/Right Alt/i, "RAlt")
+            .replace(/Left Alt/i, "LAlt")
+            .replace(/Right Super/i, "RWin")
+            .replace(/Left Super/i, "LWin")
+            .replace(/Numpad /i, "Num");
+    }
+
     $: {
         if (!literal && boundKey !== undefined && boundKey !== UNKNOWN_KEY) {
             getPrintableKeyName(boundKey)
                 .then(printableKey => {
-                    printableKeyName = printableKey.localized;
+                    printableKeyName = abbreviateKeyName(printableKey.localized);
                 });
         } else {
-            printableKeyName = boundKey === UNKNOWN_KEY ? undefined : boundKey;
+            printableKeyName = boundKey === UNKNOWN_KEY ? undefined : abbreviateKeyName(boundKey);
         }
     }
 
@@ -63,27 +77,30 @@
 </span>
 
 <style lang="scss">
-
   .wrapper {
-    column-gap: 2px;
     display: flex;
     align-items: center;
+    gap: 2px;
   }
 
   .dimmed {
     color: var(--clickgui-text-dimmed-color);
+    font-weight: 400;
+  }
+
+  .modifier {
+    color: var(--clickgui-text-dimmed-color);
+    font-weight: 400;
   }
 
   .modifier:after {
     content: "+";
-    color: var(--clickgui-text-dimmed-color);
-    opacity: 0.8;
-    line-height: 1;
-    font-family: monospace;
     margin-left: 2px;
+    opacity: 0.6;
   }
 
   .boundKey {
-    font-weight: bold;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 </style>

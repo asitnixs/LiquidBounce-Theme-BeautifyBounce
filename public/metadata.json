@@ -25,7 +25,6 @@
   ],
   "components": [
     "Watermark",
-    "TabGui",
     "ArrayList",
     "Notifications",
     "Hotbar",
@@ -42,18 +41,16 @@
     "Taco",
     "Image",
     "Text",
-    "KeyBinds"
+    "KeyBinds",
+    "MotionGraph",
+    "Coordinates",
+    "Information"
   ],
   "fonts": [
-    "Inter-Black.ttf",
-    "Inter-Bold.ttf",
-    "Inter-ExtraBold.ttf",
-    "Inter-ExtraLight.ttf",
-    "Inter-Light.ttf",
-    "Inter-Medium.ttf",
-    "Inter-Regular.ttf",
-    "Inter-SemiBold.ttf",
-    "Inter-Thin.ttf"
+    "SF-Pro-Text-Bold.ttf",
+    "SF-Pro-Text-Light.ttf",
+    "SF-Pro-Text-Medium.ttf",
+    "SF-Pro-Text-Regular.ttf"
   ],
   "backgrounds": [
     {

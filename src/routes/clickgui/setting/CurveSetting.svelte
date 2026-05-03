@@ -317,22 +317,32 @@
 
 <div class="setting">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="head" class:expanded on:contextmenu|preventDefault={() => expanded = !expanded}>
+    <div class="head" on:click={() => expanded = !expanded}>
         <div class="title">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
         <ExpandArrow bind:expanded/>
     </div>
 
     <div class="canvas-wrapper" class:visible={expanded}>
-        <canvas on:click={addPoint} on:contextmenu={removePoint}
-                bind:this={canvasElement}></canvas>
+        <canvas on:click={addPoint} on:contextmenu={removePoint} bind:this={canvasElement}></canvas>
     </div>
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 7px 0;
-    position: relative;
+    padding: 6px 0;
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .title {
+    color: var(--clickgui-text-color);
+    font-size: 12px;
+    font-weight: 500;
   }
 
   .canvas-wrapper {
@@ -340,28 +350,17 @@
     opacity: 0;
     overflow: hidden;
     will-change: height, opacity;
-    transition: ease height 0.2s, ease opacity 0.2s;
+    transition: ease height 0.4s, ease opacity 0.4s;
+    margin-top: 0;
+    border-radius: 8px;
 
     &.visible {
-      height: 180px;
+      height: 200px;
       opacity: 1;
+      margin-top: 6px;
+      padding: 6px;
+      background: var(--clickgui-window-background-color);
+      border: 1px solid var(--clickgui-border-color);
     }
   }
-
-  .title {
-    color: var(--clickgui-text-color);
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .head {
-    display: flex;
-    justify-content: space-between;
-    transition: ease margin-bottom .2s;
-
-    &.expanded {
-      margin-bottom: 10px;
-    }
-  }
-
 </style>

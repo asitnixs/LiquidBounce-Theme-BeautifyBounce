@@ -4,7 +4,7 @@
     export let textComponent: TTextComponent | string;
     export let allowPreformatting = false;
     export let preFormattingMonospace = true;
-    export let inheritedColor = "#ffffff";
+    export let inheritedColor = "var(--clickgui-text-color)"; 
     export let inheritedStrikethrough = false;
     export let inheritedItalic = false;
     export let inheritedUnderlined = false;
@@ -27,14 +27,14 @@
         red: "#ff5555",
         light_purple: "#ff55ff",
         yellow: "#ffff55",
-        white: "#ffffff"
+        white: "var(--clickgui-text-color)" 
     };
 
     function translateColor(color: string): string {
         if (!color) {
             return colors.white;
         }
-        if (color.startsWith("#")) {
+        if (color.startsWith("#") || color.startsWith("var")) {
             return color;
         } else {
             return colors[color];
@@ -153,10 +153,6 @@
 
         &.allow-preformatting {
             white-space: pre;
-        }
-
-        &.monospace {
-            font-family: monospace;
         }
 
         &.bold {

@@ -67,44 +67,49 @@
     }
 </script>
 
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+
 <Menu>
-    <OptionBar>
-        <Search on:search={handleSearch}/>
-        <MultiSelect title="Game Mode" options={["Survival", "Creative", "Adventure", "Spectator"]}
-                     bind:values={gameModes}/>
-        <MultiSelect title="Difficulty" options={["Peaceful", "Easy", "Normal", "Hard"]} bind:values={difficulties}/>
-    </OptionBar>
+    <div class="compact-layout">
+        <OptionBar>
+            <Search on:search={handleSearch}/>
+            <MultiSelect title="Game Mode" options={["Survival", "Creative", "Adventure", "Spectator"]}
+                        bind:values={gameModes}/>
+            <MultiSelect title="Difficulty" options={["Peaceful", "Easy", "Normal", "Hard"]} bind:values={difficulties}/>
+        </OptionBar>
 
-    <MenuList sortable={false} on:sort={handleWorldSort}>
-        {#each renderedWorlds as world}
-            <MenuListItem
-                    image={!world.icon ?
-                        `${REST_BASE}/api/v1/client/resource?id=minecraft:textures/misc/unknown_server.png` :
-                        `data:image/png;base64,${world.icon}`}
-                    title={world.displayName}
-                    on:dblclick={() => openWorld(world.name)}>
-                <svelte:fragment slot="subtitle">
-                    <span class="world-name">{world.name}</span>
-                    <span>({dateFormat(new Date(world.lastPlayed), "yyyy/mm/dd h:MM:ss TT")})</span>
-                </svelte:fragment>
+        <MenuList sortable={false} on:sort={handleWorldSort}>
+            {#each renderedWorlds as world}
+                <MenuListItem
+                        image={!world.icon ?
+                            `${REST_BASE}/api/v1/client/resource?id=minecraft:textures/misc/unknown_server.png` :
+                            `data:image/png;base64,${world.icon}`}
+                        title={world.displayName}
+                        on:dblclick={() => openWorld(world.name)}>
+                    <svelte:fragment slot="subtitle">
+                        <span class="world-name">{world.name}</span>
+                        <span>({dateFormat(new Date(world.lastPlayed), "yyyy/mm/dd h:MM:ss TT")})</span>
+                    </svelte:fragment>
 
-                <svelte:fragment slot="tag">
-                    <MenuListItemTag text={capitalize(world.gameMode)}/>
-                    <MenuListItemTag text={capitalize(world.difficulty)}/>
-                    <MenuListItemTag text="Minecraft {world.version}"/>
-                </svelte:fragment>
+                    <svelte:fragment slot="tag">
+                        <MenuListItemTag text={capitalize(world.gameMode)}/>
+                        <MenuListItemTag text={capitalize(world.difficulty)}/>
+                        <MenuListItemTag text="Minecraft {world.version}"/>
+                    </svelte:fragment>
 
-                <svelte:fragment slot="active-visible">
-                    <MenuListItemButton title="Delete" icon="trash" on:click={() => removeWorld(world.name)}/>
-                    <MenuListItemButton title="Edit" icon="pen-2" on:click={() => editWorld(world.name)}/>
-                </svelte:fragment>
+                    <svelte:fragment slot="active-visible">
+                        <MenuListItemButton title="Delete" icon="trash" on:click={() => removeWorld(world.name)}/>
+                        <MenuListItemButton title="Edit" icon="pen-2" on:click={() => editWorld(world.name)}/>
+                    </svelte:fragment>
 
-                <svelte:fragment slot="always-visible">
-                    <MenuListItemButton title="Open" icon="play" on:click={() => openWorld(world.name)}/>
-                </svelte:fragment>
-            </MenuListItem>
-        {/each}
-    </MenuList>
+                    <svelte:fragment slot="always-visible">
+                        <MenuListItemButton title="Open" icon="play" on:click={() => openWorld(world.name)}/>
+                    </svelte:fragment>
+                </MenuListItem>
+            {/each}
+        </MenuList>
+    </div>
 
     <BottomButtonWrapper>
         <ButtonContainer>
@@ -120,5 +125,33 @@
 <style lang="scss">
   .world-name {
     font-weight: 500;
+  }
+
+  .compact-layout {
+        max-width: 1600px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+
+  .bg-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('backgrounds/background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -2;
+  }
+
+  .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.35) 100%);
+      backdrop-filter: blur(4px);
+      z-index: -1;
   }
 </style>

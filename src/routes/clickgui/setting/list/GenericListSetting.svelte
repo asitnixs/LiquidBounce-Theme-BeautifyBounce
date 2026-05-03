@@ -64,7 +64,7 @@
 <style lang="scss">
 
   .setting {
-    padding: 7px 0;
+    padding: 6px 0;
   }
 
   .head {
@@ -79,7 +79,7 @@
     .name {
       color: var(--clickgui-text-color);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 500;
     }
   }
 
@@ -96,11 +96,11 @@
     width: 100%;
     border: none;
     border-bottom: solid 1px var(--accent-color);
-    font-family: "Inter", sans-serif;
     font-size: 12px;
-    padding: 5px;
+    font-weight: 400;
+    padding: 4px;
     color: var(--clickgui-text-color);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     background-color: var(--clickgui-input-background-color);
   }
 </style>

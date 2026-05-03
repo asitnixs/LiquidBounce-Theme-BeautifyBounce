@@ -185,43 +185,42 @@
                     requiresAuthentication={currentEditProxy.credentials !== undefined}/>
 {/if}
 <Menu>
-    <OptionBar>
-        <Search on:search={handleSearch}/>
-        <SwitchSetting title="Favorites Only" bind:value={favoritesOnly}/>
-        <MultiSelect title="Country" options={allCountries} bind:values={countries}/>
-        <MultiSelect title="Type" options={["SOCKS5", "HTTP"]} bind:values={proxyTypes}/>
-    </OptionBar>
+    <div class="compact-layout">
+        <OptionBar>
+            <Search on:search={handleSearch}/>
+        </OptionBar>
 
-    <MenuList sortable={false} on:sort={handleProxySort}>
-        {#each renderedProxies as proxy}
-            <MenuListItem
-                    image="img/flags/{(proxy.ipInfo?.country ?? 'unknown').toLowerCase()}.svg"
-                    title="{proxy.host}:{proxy.port}"
-                    favorite={proxy.favorite}
-                    on:dblclick={() => connectToProxy(proxy.id)}>
-                <svelte:fragment slot="subtitle">
-                    <span class="subtitle">{proxy.ipInfo?.org ?? "Unknown"}</span>
-                </svelte:fragment>
+        <MenuList sortable={false} on:sort={handleProxySort}>
+            {#each renderedProxies as proxy}
+                <MenuListItem
+                        image="img/flags/{(proxy.ipInfo?.country ?? 'unknown').toLowerCase()}.svg"
+                        title="{proxy.host}:{proxy.port}"
+                        favorite={proxy.favorite}
+                        on:dblclick={() => connectToProxy(proxy.id)}>
+                    <svelte:fragment slot="subtitle">
+                        <span class="subtitle">{proxy.ipInfo?.org ?? "Unknown"}</span>
+                    </svelte:fragment>
 
-                <svelte:fragment slot="tag">
-                    <MenuListItemTag text={convertCountryCode(proxy.ipInfo?.country)}/>
-                    <MenuListItemTag text={proxy.type}/>
-                </svelte:fragment>
+                    <svelte:fragment slot="tag">
+                        <MenuListItemTag text={convertCountryCode(proxy.ipInfo?.country)}/>
+                        <MenuListItemTag text={proxy.type}/>
+                    </svelte:fragment>
 
-                <svelte:fragment slot="active-visible">
-                    <MenuListItemButton title="Delete" icon="trash" on:click={() => removeProxy(proxy.id)}/>
-                    <MenuListItemButton title="Check" icon="check" on:click={() => checkProxy(proxy.id)}/>
-                    <MenuListItemButton title="Favorite" icon={proxy.favorite ? "favorite-filled" : "favorite" }
-                                        on:click={() => toggleFavorite(proxy.id, !proxy.favorite)}/>
-                    <MenuListItemButton title="Edit" icon="pen-2" on:click={() => editProxy(proxy)}/>
-                </svelte:fragment>
+                    <svelte:fragment slot="active-visible">
+                        <MenuListItemButton title="Delete" icon="trash" on:click={() => removeProxy(proxy.id)}/>
+                        <MenuListItemButton title="Check" icon="check" on:click={() => checkProxy(proxy.id)}/>
+                        <MenuListItemButton title="Favorite" icon={proxy.favorite ? "favorite-filled" : "favorite" }
+                                            on:click={() => toggleFavorite(proxy.id, !proxy.favorite)}/>
+                        <MenuListItemButton title="Edit" icon="pen-2" on:click={() => editProxy(proxy)}/>
+                    </svelte:fragment>
 
-                <svelte:fragment slot="always-visible">
-                    <MenuListItemButton title="Connect" icon="play" on:click={() => connectToProxy(proxy.id)}/>
-                </svelte:fragment>
-            </MenuListItem>
-        {/each}
-    </MenuList>
+                    <svelte:fragment slot="always-visible">
+                        <MenuListItemButton title="Connect" icon="play" on:click={() => connectToProxy(proxy.id)}/>
+                    </svelte:fragment>
+                </MenuListItem>
+            {/each}
+        </MenuList>
+    </div>
 
     <BottomButtonWrapper>
         <ButtonContainer>
@@ -238,3 +237,15 @@
         </ButtonContainer>
     </BottomButtonWrapper>
 </Menu>
+
+<style lang="scss">
+    .compact-layout {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+</style>

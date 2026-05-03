@@ -19,15 +19,15 @@
 <style lang="scss">
   .avatar-wrapper {
     grid-area: a;
-    height: 50px;
-    width: 50px;
+    height: 44px;
+    width: 44px;
     position: relative;
   }
 
   .avatar {
     height: 100%;
     width: 100%;
-    border-radius: 50%;
+    border-radius: 12px;
   }
 
   .loader {

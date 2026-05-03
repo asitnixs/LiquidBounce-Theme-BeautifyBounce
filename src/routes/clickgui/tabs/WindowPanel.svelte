@@ -10,7 +10,7 @@
     }>();
 </script>
 
-<div class="window" transition:fade|global={{duration: 200, easing: quintOut}}>
+<div class="window" transition:fade|global={{duration: 400, easing: quintOut}}>
     <div class="title">
         {#if icon}
             <img
@@ -37,7 +37,7 @@
     --window-max-height: 70vh;
     background-color: var(--clickgui-window-background-color);
     max-height: var(--window-max-height, none);
-    border-radius: 5px;
+    border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 0 10px var(--clickgui-window-shadow-color);
     user-select: none;
@@ -47,21 +47,20 @@
     display: grid;
     grid-template-columns: max-content 1fr;
     align-items: center;
-    column-gap: 12px;
+    column-gap: 10px;
     background-color: var(--clickgui-window-header-background-color);
-    padding: 16px 22px;
+    padding: 16px 16px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--clickgui-text-color);
-    border-bottom: 2px solid var(--clickgui-window-header-border-color);
   }
 
   .title-text {
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .content {
-    padding: 12px 22px 18px;
+    padding: 16px 16px;
     overflow: auto;
     max-height: calc(var(--window-max-height, 9999px) - 60px);
   }

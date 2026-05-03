@@ -30,7 +30,7 @@
 <style lang="scss">
 
   .setting {
-    padding: 7px 0px;
+    padding: 6px 0px;
   }
 
   .name {
@@ -42,18 +42,18 @@
 
   .value {
     width: 100%;
-    background-color: var(--clickgui-input-background-color);
-    font-family: monospace;
+    background: var(--clickgui-window-background-color);
+    font-weight: 400;
     font-size: 12px;
     color: var(--clickgui-text-color);
-    border: none;
-    border-bottom: solid 2px var(--clickgui-input-border-color);
-    padding: 5px;
-    border-radius: 3px;
-    transition: ease border-color .2s;
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 8px;
+    padding: 6px 10px;
+    outline: none;
+    transition: border-color 0.4s, background 0.4s;
 
-    &::-webkit-scrollbar {
-      background-color: transparent;
+    &:focus {
+      border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
     }
   }
 </style>

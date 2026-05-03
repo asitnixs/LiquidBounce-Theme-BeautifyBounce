@@ -43,7 +43,7 @@
 
     {#if expanded}
         <div class="nested-settings">
-            {#each cSetting.value as setting (setting.name)}
+            {#each cSetting.value as setting, i (i)}
                 <GenericSetting path={thisPath} bind:setting on:change={handleChange}/>
             {/each}
         </div>
@@ -53,27 +53,29 @@
 <style lang="scss">
 
   .setting {
-    padding: 7px 0;
+    padding: 6px 0;
   }
 
   .title {
     color: var(--clickgui-text-color);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .head {
     display: flex;
     justify-content: space-between;
-    transition: ease margin-bottom .2s;
+    transition: ease margin-bottom 0.4s;
 
     &.expanded {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
   }
 
   .nested-settings {
-    border-left: solid 2px var(--clickgui-setting-group-border-color);
-    padding-left: 7px;
+    padding: 4px 10px;
+    background-color: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 8px;
   }
 </style>

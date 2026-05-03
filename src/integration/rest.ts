@@ -1,6 +1,7 @@
 import {REST_BASE} from "./host";
 import type {
     Account,
+    Alignment,
     Browser,
     ClientInfo,
     ClientUpdate,
@@ -763,4 +764,14 @@ export function itemTextureUrl(identifier: string) {
 
 export function effectTextureUrl(effectId: string) {
     return `${API_BASE}/client/resource/effectTexture?id=${effectId}`
+}
+
+export async function saveComponentAlignment(componentName: string, alignment: Alignment) {
+    await fetch(`${API_BASE}/client/components/${componentName}/alignment`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(alignment)
+    });
 }

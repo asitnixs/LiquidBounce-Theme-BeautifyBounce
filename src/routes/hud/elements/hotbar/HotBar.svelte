@@ -66,13 +66,13 @@
 {#if playerData && playerData.gameMode !== "spectator"}
     <div class="hotbar">
         {#if overlayMessage !== null}
-            <div class="overlay-message" out:fade={{duration: 200}}
+            <div class="overlay-message" out:fade={{duration: 300}}
                  style="max-width: {slotsElement?.offsetWidth ?? 0}px">
                 <TextComponent fontSize={14} textComponent={overlayMessage.text} allowPreformatting={true} />
             </div>
         {/if}
         {#if showItemStackName && itemStackName !== null}
-            <div class="item-name" out:fade={{duration: 200}}>
+            <div class="item-name" out:fade={{duration: 300}}>
                 <TextComponent fontSize={14} textComponent={itemStackName}/>
             </div>
         {/if}
@@ -170,29 +170,29 @@
   .pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 25px;
+    column-gap: 24px;
   }
 
   .status {
     display: flex;
     flex-direction: column;
-    margin-bottom: 5px;
-    row-gap: 5px;
+    margin-bottom: 6px;
+    row-gap: 6px;
     column-gap: 20px;
   }
 
   .hotbar-elements {
-    background-color: var(--hotbar-slot-background-color);
+    background-color: color-mix(in srgb, var(--clickgui-base-color) 90%, transparent);
     position: relative;
-    border-radius: 5px;
+    border-radius: 12px;
     overflow: hidden;
 
     .slider {
-      border: solid 2px var(--hotbar-slot-border-color);
+      border: solid 2px var(--accent-color);
       height: 45px;
       width: 45px;
       position: absolute;
-      border-radius: 5px;
+      border-radius: 12px;
       /* transition: linear left 0.05s; TODO: Animation is possible but annoying */
     }
 
@@ -209,28 +209,29 @@
   .offhand-slot {
     height: 45px;
     width: 45px;
-    border-radius: 5px;
-    background-color: var(--hotbar-slot-background-color);
+    border-radius: 12px;
+    background-color: color-mix(in srgb, var(--clickgui-base-color) 90%, transparent);
     position: absolute;
     bottom: 0;
-    left: -65px;
+    left: -64px;
   }
 
   .item-name {
     color: var(--hotbar-text-color);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--hotbar-text-color) 40%, transparent);
     font-size: 14px;
-    margin: 0 auto 15px;
+    margin: 0 auto 20px;
     font-weight: 500;
-    background-color: var(--hotbar-item-name-background-color);
-    padding: 5px 8px;
-    border-radius: 5px;
+    background-color: color-mix(in srgb, var(--clickgui-base-color) 90%, transparent);
+    padding: 6px 8px;
+    border-radius: 10px;
     width: max-content;
   }
 
   .overlay-message {
     text-align: center;
     color: var(--hotbar-text-color);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     overflow: hidden;
   }
 </style>

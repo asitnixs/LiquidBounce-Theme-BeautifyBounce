@@ -61,7 +61,7 @@
     {:else if setting.valueType === "REGISTRY_LIST" }
         <RegistryListSetting {path} bind:setting={setting} on:change/>
     {:else if setting.valueType === "BIND"}
-        <BindSetting bind:setting={setting} on:change/>
+        <!-- <BindSetting bind:setting={setting} moduleName={path.split(".")[1] ?? ""} on:change/> -->
     {:else if setting.valueType === "VECTOR3_I" }
         <VectorSetting vecAxes={["x", "y", "z"]} step={1} bind:setting={setting} on:change/>
     {:else if setting.valueType === "VECTOR3_D" }

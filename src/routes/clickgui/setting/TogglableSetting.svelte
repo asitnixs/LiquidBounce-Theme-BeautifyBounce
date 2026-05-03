@@ -17,7 +17,7 @@
 
     const enabledSetting = cSetting.value[0] as TBooleanSetting;
 
-    let nestedSettings = cSetting.value.slice(1);
+    let nestedSettings = deduplicateSettings(cSetting.value).slice(1);
 
     let expanded = localStorage.getItem(thisPath) === "true";
 
@@ -30,6 +30,16 @@
 
     function toggleExpanded() {
         expanded = !expanded;
+    }
+
+    function deduplicateSettings(settings: any[]) {
+    const seen = new Set();
+        return settings.filter((s: { name: any; valueType: any; }) => {
+            const key = `${s.name}_${s.valueType}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
     }
 </script>
 
@@ -65,25 +75,30 @@
 
 <style lang="scss">
 
-    .setting {
-        padding: 7px 0px;
+  .setting {
+    padding: 6px 0;
+  }
+
+  .title {
+    color: var(--clickgui-text-color);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    transition: ease margin-bottom 0.4s;
+
+    &.expanded {
+      margin-bottom: 8px;
     }
+  }
 
-    .head {
-        transition: ease margin-bottom .2s;
-
-        &.expand {
-          display: grid;
-          grid-template-columns: 1fr max-content;
-        }
-
-        &.expanded {
-            margin-bottom: 10px;
-        }
-    }
-
-    .nested-settings {
-        border-left: solid 2px var(--clickgui-setting-group-border-color);
-        padding-left: 7px;
-    }
+  .nested-settings {
+    padding: 4px 10px;
+    background-color: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 8px;
+  }
 </style>

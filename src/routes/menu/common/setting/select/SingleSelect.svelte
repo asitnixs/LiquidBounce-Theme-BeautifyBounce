@@ -1,6 +1,4 @@
 <script lang="ts">
-    import {slide} from "svelte/transition";
-    import {quintOut} from "svelte/easing";
     import {createEventDispatcher} from "svelte";
     import GenericSelect from "./GenericSelect.svelte";
 
@@ -18,38 +16,49 @@
     }
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <GenericSelect closeOnInternalClick={true}>
-    <span slot="title"><span class="title">{title}</span> {value}</span>
+    <span slot="title"><span class="title">{title}:</span> <span class="val">{value}</span></span>
 
     <svelte:fragment slot="options">
         {#each options as o}
-            <div on:click={() => handleOptionClick(o)} class="option" class:active={o === value}
-                 transition:slide|global={{ duration: 200, easing: quintOut }}>{o}</div>
+            <div on:click={() => handleOptionClick(o)} class="option" class:active={o === value}>
+                {o}
+            </div>
         {/each}
     </svelte:fragment>
 </GenericSelect>
 
 <style lang="scss">
-
   .title {
-    font-weight: 600;
+    font-weight: 500;
+    color: var(--clickgui-text-dimmed-color);
+    margin-right: 4px;
+  }
+  
+  .val {
+    font-weight: 500;
+    color: var(--clickgui-text-color);
   }
 
   .option {
-    font-weight: 500;
-    color: var(--menu-text-dimmed-color);
-    font-size: 20px;
-    padding: 15px 20px;
-    transition: ease color .2s;
+    font-weight: 400;
+    color: var(--clickgui-text-dimmed-color);
+    font-size: 16px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    margin-top: 4px;
 
     &:hover {
-      color: var(--menu-text-color);
+      background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+      color: var(--clickgui-text-color);
     }
 
     &.active {
+      background: color-mix(in srgb, var(--accent-color) 40%, transparent);
       color: var(--accent-color);
+      font-weight: 500;
     }
   }
 </style>

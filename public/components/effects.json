@@ -4,8 +4,8 @@
   "singleton": true,
   "alignment": {
     "horizontalAlignment": "Right",
-    "horizontalOffset": 15,
-    "verticalAlignment": "Bottom",
+    "horizontalOffset": 200,
+    "verticalAlignment": "Top",
     "verticalOffset": 15
   },
   "tweaks": ["DISABLE_STATUS_EFFECT_OVERLAY"]

@@ -281,7 +281,6 @@
     padding: 15px 25px;
     background-color: transparent;
     border: none;
-    font-family: "Inter", sans-serif;
     font-size: 16px;
     color: var(--clickgui-text-color);
     width: 100%;

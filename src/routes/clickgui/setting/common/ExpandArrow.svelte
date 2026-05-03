@@ -2,7 +2,6 @@
     import {createEventDispatcher} from "svelte";
 
     export let expanded: boolean;
-
     const dispatch = createEventDispatcher();
 
     function handleClick() {
@@ -11,27 +10,33 @@
     }
 </script>
 
-<!-- svelte-ignore a11y_consider_explicit_label -->
-<button class="arrow" class:expanded on:click={handleClick}
-></button>
+<button class="arrow-btn" class:expanded on:click={handleClick} aria-label="Expand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+</button>
 
 <style lang="scss">
-  @use "../../icon-settings-expand" as *;
-
-  .arrow {
-    width: 20px;
-    position: relative;
+  .arrow-btn {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    background-color: transparent;
-    border: none;
+    color: var(--clickgui-text-dimmed-color);
+    transition: transform 0.4s ease, color 0.4s ease;
 
-    &::after {
-      @include icon-settings-expand($right: 0);
+    &.expanded {
+      transform: rotate(-180deg);
     }
 
-    &.expanded::after {
-      transform: translateY(-50%) rotate(0);
-      opacity: 1;
+    &:hover {
+      color: var(--clickgui-text-color);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
     }
   }
 </style>

@@ -59,8 +59,8 @@
         <AnimatedLogo/>
     {:else}
         <LiquidBounceLogo
-            width="261.263px"
-            height="98px"
+            width="160px"
+            height="80px"
             badgeFill="var(--accent-color)"
         />
     {/if}
@@ -74,7 +74,6 @@
   .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 60px;
     align-items: center;
   }
 </style>

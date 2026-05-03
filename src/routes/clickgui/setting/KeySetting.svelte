@@ -1,16 +1,20 @@
 <script lang="ts">
-    import type {KeySetting, ModuleSetting} from "../../../integration/types";
-    import {convertToSpacedString, spaceSeperatedNames} from "../../../theme/theme_config";
-    import {getPrintableKeyName} from "../../../integration/rest";
-    import {createEventDispatcher} from "svelte";
-    import {listen} from "../../../integration/ws";
-    import type {KeyboardKeyEvent, MouseButtonEvent} from "../../../integration/events";
-    import {isClickGuiScreen, UNKNOWN_KEY} from "../../../util/utils";
+    import type { KeySetting, ModuleSetting } from "../../../integration/types";
+    import {
+        convertToSpacedString,
+        spaceSeperatedNames,
+    } from "../../../theme/theme_config";
+    import { getPrintableKeyName } from "../../../integration/rest";
+    import { createEventDispatcher } from "svelte";
+    import { listen } from "../../../integration/ws";
+    import type {
+        KeyboardKeyEvent,
+        MouseButtonEvent,
+    } from "../../../integration/events";
+    import { isClickGuiScreen, UNKNOWN_KEY } from "../../../util/utils";
 
     export let setting: ModuleSetting;
-
     const cSetting = setting as KeySetting;
-
     const dispatch = createEventDispatcher();
 
     let isHovered = false;
@@ -19,114 +23,133 @@
 
     $: {
         if (cSetting.value !== UNKNOWN_KEY) {
-            getPrintableKeyName(cSetting.value)
-                .then(printableKey => {
-                    printableKeyName = printableKey.localized;
-                });
+            getPrintableKeyName(cSetting.value).then(
+                (key) => (printableKeyName = key.localized),
+            );
         }
     }
 
-    async function toggleBinding() {
-        if (binding) {
-            cSetting.value = UNKNOWN_KEY;
-        }
-
+    function toggleBinding() {
+        if (binding) cSetting.value = UNKNOWN_KEY;
         binding = !binding;
-
-        setting = {...cSetting};
-
+        setting = { ...cSetting };
         dispatch("change");
     }
 
     listen("keyboardKey", async (e: KeyboardKeyEvent) => {
-        if (!isClickGuiScreen(e.screen)) {
-            return;
-        }
-
-        if (!binding) {
-            return;
-        }
-
+        if (!isClickGuiScreen(e.screen) || !binding) return;
         binding = false;
-
-        if (e.keyCode !== 256) {
-            cSetting.value = e.key;
-        } else {
-            cSetting.value = UNKNOWN_KEY;
-        }
-
-        setting = {...cSetting};
-
+        cSetting.value = e.keyCode !== 256 ? e.key : UNKNOWN_KEY;
+        setting = { ...cSetting };
         dispatch("change");
     });
 
     listen("mouseButton", async (e: MouseButtonEvent) => {
-        if (!isClickGuiScreen(e.screen)) {
+        if (
+            !isClickGuiScreen(e.screen) ||
+            !binding ||
+            (e.button === 0 && isHovered)
+        )
             return;
-        }
-
-        if (!binding || (e.button === 0 && isHovered)) {
-            return;
-        }
-
         binding = false;
-
         cSetting.value = e.key;
-
-        setting = {...cSetting};
-
+        setting = { ...cSetting };
         dispatch("change");
-    })
+    });
 </script>
 
-<div class="setting">
+<div class="setting-row">
+    <div class="name">
+        {$spaceSeperatedNames
+            ? convertToSpacedString(cSetting.name)
+            : cSetting.name}
+    </div>
+
     <button
-            class="change-bind"
-            on:click={toggleBinding}
-            on:mouseenter={() => isHovered = true}
-            on:mouseleave={() => isHovered = false}
+        class="key-btn"
+        class:binding
+        on:click={toggleBinding}
+        on:mouseenter={() => (isHovered = true)}
+        on:mouseleave={() => (isHovered = false)}
     >
         {#if !binding}
-            <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}:</div>
-
             {#if cSetting.value === UNKNOWN_KEY}
                 <span class="none">None</span>
             {:else}
-                <span>{printableKeyName}</span>
+                <span class="bound">{printableKeyName}</span>
             {/if}
         {:else}
-            <span>Press any key</span>
+            <span class="listening">...</span>
         {/if}
     </button>
 </div>
 
 <style lang="scss">
-
-  .setting {
-    padding: 7px 0;
-  }
-
-  .change-bind {
-    background-color: transparent;
-    border: solid 2px var(--accent-color);
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 4px;
-    font-weight: 500;
-    color: var(--clickgui-text-color);
-    font-size: 12px;
-    font-family: "Inter", sans-serif;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    column-gap: 5px;
+    .setting-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+    }
 
     .name {
-      font-weight: 500;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--clickgui-text-dimmed-color);
     }
 
-    .none {
-      color: var(--clickgui-text-dimmed-color);
+    .key-btn {
+        all: unset;
+        background: var(--clickgui-window-background-color);
+        border: 1px solid var(--clickgui-border-color);
+        padding: 4px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+
+        .none {
+            color: var(--clickgui-text-dimmed-color);
+            font-weight: 500;
+        }
+
+        .bound {
+            color: var(--clickgui-text-color);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        &:hover {
+            border-color: var(--accent-color);
+        }
+
+        &.binding {
+            border-color: var(--accent-color);
+            background: color-mix(
+                in srgb,
+                var(--accent-color) 20%,
+                transparent
+            );
+            color: var(--accent-color);
+        }
     }
-  }
+
+    .listening {
+        animation: pulse 1s infinite alternate;
+        font-weight: 500;
+        color: var(--accent-color);
+    }
+
+    @keyframes pulse {
+        from {
+            opacity: 0.5;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 </style>

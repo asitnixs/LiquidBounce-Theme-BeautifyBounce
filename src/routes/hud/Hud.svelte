@@ -3,7 +3,6 @@
     import TargetHud from "./elements/targethud/TargetHud.svelte";
     import Watermark from "./elements/Watermark.svelte";
     import Notifications from "./elements/notifications/Notifications.svelte";
-    import TabGui from "./elements/tabgui/TabGui.svelte";
     import HotBar from "./elements/hotbar/HotBar.svelte";
     import Scoreboard from "./elements/Scoreboard.svelte";
     import {onMount} from "svelte";
@@ -21,10 +20,30 @@
     import GenericPlayerInventory from "./elements/inventory/GenericPlayerInventory.svelte";
     import {os} from "../clickgui/clickgui_store";
     import InventoryStatistics from "./elements/inventory/InventoryStatistics.svelte";
+    import MotionGraph from "./elements/MotionGraph.svelte";
+    import Information from "./elements/Information.svelte";
 
     let zoom = 100;
     let metadata: Metadata;
     let components: HudComponent[] = [];
+
+    function applyStoredAlignments(comps: HudComponent[]): HudComponent[] {
+        return comps.map(c => {
+            let settings = { ...c.settings };
+
+            const storedPos = localStorage.getItem(`hud_pos_${c.name}`);
+            if (storedPos) {
+                try { settings.alignment = JSON.parse(storedPos); } catch {}
+            }
+
+            const storedEnabled = localStorage.getItem(`hud_enabled_${c.name}`);
+            if (storedEnabled !== null) {
+                settings.enabled = storedEnabled === "true";
+            }
+
+            return { ...c, settings };
+        });
+    }
 
     onMount(async () => {
         $os = (await getClientInfo()).os;
@@ -33,7 +52,7 @@
         zoom = gameWindow.scaleFactor * 50;
 
         metadata = await getMetadata();
-        components = await getComponents(metadata.id);
+        components = applyStoredAlignments(await getComponents(metadata.id));
     });
 
     listen("scaleFactorChange", (data: ScaleFactorChangeEvent) => {
@@ -41,14 +60,9 @@
     });
 
     listen("componentsUpdate", (data: ComponentsUpdateEvent) => {
-        if (data.id != metadata.id) {
-            // reject
-            return;
-        }
-
-        // force update to re-render
+        if (data.id != metadata.id) return;
         components = [];
-        components = data.components;
+        components = applyStoredAlignments(data.components);
     });
 </script>
 
@@ -60,8 +74,6 @@
                     <Watermark/>
                 {:else if c.name === "ArrayList"}
                     <ArrayList settings={c.settings}/>
-                {:else if c.name === "TabGui"}
-                    <TabGui/>
                 {:else if c.name === "Notifications"}
                     <Notifications/>
                 {:else if c.name === "TargetHud"}
@@ -75,7 +87,6 @@
                 {:else if c.name === "ArmorItems"}
                     <GenericPlayerInventory
                             rowLength={1}
-                            backgroundColor="transparent"
                             gap="2px"
                             getRenderedStacks={it => Array.from(it.armor).reverse()}
                     />
@@ -99,6 +110,10 @@
                     <img alt="" src="{c.settings.uRL}" style="scale: {c.settings.scale};">
                 {:else if c.name === "KeyBinds"}
                     <KeyBinds/>
+                {:else if c.name === "MotionGraph"}
+                    <MotionGraph settings={c.settings} />
+                {:else if c.name === "Information"}
+                    <Information settings={c.settings} />
                 {/if}
             </DraggableComponent>
         {/if}

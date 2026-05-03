@@ -1,5 +1,6 @@
 <script lang="ts">
     import {createEventDispatcher} from "svelte";
+    import {slide} from "svelte/transition";
     import {convertToSpacedString, spaceSeperatedNames} from "../../../../theme/theme_config";
 
     export let name: string | null;
@@ -12,114 +13,161 @@
     let dropdownHead: HTMLElement;
 
     function windowClickHide(e: MouseEvent) {
-        if (!dropdownHead.contains(e.target as Node)) {
+        if (dropdownHead && !dropdownHead.contains(e.target as Node)) {
             expanded = false;
         }
     }
 
     function updateValue(v: string) {
         value = v;
+        expanded = false;
         dispatch("change");
     }
 </script>
 
 <svelte:window on:click={windowClickHide}/>
+
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="dropdown" class:expanded on:click={() => (expanded = !expanded)}>
-    <div class="head" bind:this={dropdownHead}>
-        {#if name !== null}
-            <span class="text">{$spaceSeperatedNames ? convertToSpacedString(name) : name}
-                &bull; {$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
-        {:else}
-            <span class="text">{$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
-        {/if}
-    </div>
+<div class="dropdown-container">
+    {#if name !== null}
+        <div class="dropdown-label">
+            {$spaceSeperatedNames ? convertToSpacedString(name) : name}
+        </div>
+    {/if}
 
-    {#if expanded}
-        <div class="options">
-            {#each options as o (o)}
-                <div
+    <div class="dropdown-wrapper" bind:this={dropdownHead}>
+        <div class="trigger" class:expanded on:click={() => (expanded = !expanded)}>
+            <span class="val">{$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
+            <svg class="chevron" class:expanded viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+
+        {#if expanded}
+            <div class="options" transition:slide={{ duration: 150 }}>
+                {#each options as o (o)}
+                    <div
                         class="option"
                         class:active={o === value}
                         on:click={() => updateValue(o)}
-                >
-                    {$spaceSeperatedNames ? convertToSpacedString(o) : o}
-                </div>
-            {/each}
-        </div>
-    {/if}
+                    >
+                        {$spaceSeperatedNames ? convertToSpacedString(o) : o}
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style lang="scss">
-  @use "../../icon-settings-expand" as *;
+  .dropdown-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 2px 0;
+  }
 
-  .dropdown {
+  .dropdown-label {
+    font-weight: 500;
+    color: var(--clickgui-text-color);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dropdown-wrapper {
     position: relative;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .trigger {
+    background: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    padding: 4px 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 10px;
+    transition: all 0.4s ease;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
 
     &.expanded {
-      .text::after {
-        transform: translateY(-50%) rotate(0);
-        opacity: 1;
-      }
-
-      .head {
-        border-radius: 3px 3px 0 0;
-      }
+      border-color: var(--accent-color);
+      background: color-mix(in srgb, var(--accent-color) 20%, transparent);
     }
   }
 
-  .head {
-    background-color: var(--clickgui-dropdown-trigger-background-color);
-    padding: 6px 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    position: relative;
-    border-radius: 3px;
-    transition: ease border-radius .2s;
+  .val {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--clickgui-text-color);
+    white-space: nowrap;
+  }
 
-    .text {
-      font-weight: 500;
-      color: var(--clickgui-text-color);
-      font-size: 12px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-right: 20px;
-    }
+  .chevron {
+    width: 14px;
+    height: 14px;
+    color: var(--clickgui-text-dimmed-color);
+    transition: transform 0.4s ease, color 0.4s;
 
-    .text::after {
-      @include icon-settings-expand();
+    &.expanded {
+      transform: rotate(-180deg);
+      color: var(--accent-color);
     }
   }
 
   .options {
-    padding: 6px 10px;
-    background-color: var(--clickgui-dropdown-background-color);
-    border: solid 1px var(--clickgui-dropdown-border-color);
-    border-top: none;
-    border-radius: 0 0 3px 3px;
-    z-index: 9999;
-    width: 100%;
     position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 100%;
+    width: max-content;
+    background: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 8px;
+    padding: 4px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 300px;
+    overflow-y: auto;
 
-    .option {
-      color: var(--clickgui-dropdown-option-color);
-      font-weight: 500;
-      font-size: 12px;
-      padding: 5px 0;
-      cursor: pointer;
-      text-align: center;
-      transition: ease color 0.2s;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 
-      &:hover {
-        color: var(--clickgui-dropdown-option-hover-color);
-      }
+  .option {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--clickgui-dropdown-option-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.4s;
+    white-space: nowrap;
 
-      &.active {
-        color: var(--clickgui-dropdown-option-selected-color);
-      }
+    &:hover {
+      background: var(--clickgui-base-color);
+      color: var(--clickgui-dropdown-option-hover-color);
+    }
+
+    &.active {
+      background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+      color: var(--clickgui-text-color);
+      font-weight: 600;
     }
   }
 </style>

@@ -14,6 +14,9 @@
     });
 </script>
 
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+
 <div class="menu">
     {#if ready}
         <div transition:fly|global={{duration: 700, y: -100}}>
@@ -27,8 +30,24 @@
 </div>
 
 <style lang="scss">
+  .bg-image {
+      position: fixed;
+      inset: 0;
+      background: url('backgrounds/background.png') center / cover no-repeat;
+      transform: scale(1.04);
+      z-index: -2;
+  }
+
+  .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(6px);
+      z-index: -1;
+  }
+
   .menu {
-    padding: 50px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     height: 100vh;

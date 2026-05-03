@@ -21,16 +21,16 @@
 
 <div bind:this={element}>
     {#if shown}
-        <div transition:fly="{{ y: -10, duration: 200 }}" class="tooltip" style="background-color: {color};">{text}</div>
+        <div transition:fly="{{ y: -10, duration: 200 }}" class="tooltip" style="background-color: var(--accent-color);">{text}</div>
     {/if}
 </div>
 
 <style lang="scss">
 
   .tooltip {
-    color: var(--tooltip-text-color);
-    padding: 10px 15px;
-    border-radius: 20px;
+    color: var(--clickgui-text-color);
+    padding: 10px 12px;
+    border-radius: 14px;
     font-size: 16px;
     font-weight: 600;
     position: absolute;

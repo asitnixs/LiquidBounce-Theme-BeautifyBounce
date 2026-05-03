@@ -60,7 +60,9 @@
             Unsupported value type {value.valueType}
         {/if}
         {#if value.value.length > 0}
-            <img src="img/menu/icon-select-arrow.svg" alt="expand">
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
         {/if}
     </div>
 
@@ -76,33 +78,46 @@
 <style lang="scss">
 
   .configurable-title {
-    color: var(--menu-text-color);
+    color: var(--clickgui-text-color);
     font-size: 20px;
     font-weight: 500;
+  }
+
+  .expanded .header {
+    
+    .chevron {
+        transform: rotate(-180deg);
+    }
   }
 
   .wrapped-setting {
     position: relative;
     min-width: 300px;
 
-    &.expanded {
-      .header {
-        border-radius: 5px 5px 0 0;
-      }
-    }
-
     &.has-nested-settings {
       cursor: pointer;
 
       .header {
-        background-color: var(--menu-wrapped-setting-header-background-color);
+        background: var(--clickgui-base-color);
+        border: 1px solid var(--clickgui-border-color);
         padding: 20px;
         display: flex;
         column-gap: 20px;
         align-items: center;
         justify-content: space-between;
-        border-radius: 5px;
-        transition: ease border-radius .2s;
+        border-radius: 14px;
+        transition: all 0.4s ease;
+
+        &:hover {
+            background: var(--clickgui-window-background-color);
+        }
+
+        .chevron {
+            width: 18px;
+            height: 18px;
+            color: var(--clickgui-text-dimmed-color);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
       }
     }
   }
@@ -110,11 +125,14 @@
   .nested-settings {
     position: absolute;
     z-index: 1000;
-    border-radius: 0 0 5px 5px;
-    background-color: var(--menu-wrapped-setting-content-background-color);
-    padding: 10px 13px;
+    background-color: var(--clickgui-base-color);
+    margin-top: 6px;
     zoom: 1.5;
     width: 100%;
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 </style>
 

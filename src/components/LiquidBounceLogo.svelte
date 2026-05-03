@@ -4,6 +4,7 @@
     export let badgeFill = "var(--accent-color)";
     export let badgeTextFill = "var(--text-color)";
     export let badgeGroupClass = "";
+    export let mainFill = "#ffffff";
 </script>
 
 <svg
@@ -17,7 +18,7 @@
         <slot name="defs" />
     </defs>
 
-    <g fill="#ffffff">
+    <g fill={mainFill}>
         <path
             d="M79.9,39.948A39.967,39.967,0,0,0,39.947,0H0V39.948a39.948,39.948,0,1,0,79.9,0Z"
             fill-rule="evenodd"

@@ -1,15 +1,20 @@
 <script lang="ts">
+    import { getSavedTheme } from "../../../../theme/clickgui_theme";
+
     export let icon: string;
     export let title: string;
     export let type = "text";
     export let value = "";
     export let maxLength: number | null = null;
     export let pattern: string | null = null;
+
+    let activeTheme = getSavedTheme();
+    $: iconFilter = activeTheme === "light" ? "brightness(0)" : "none";
 </script>
 
 <div class="icon-text-input">
     <div class="icon">
-        <img src="img/menu/icon-{icon}.svg" alt={icon}>
+        <img src="img/menu/icon-{icon}.svg" alt={icon} style="filter: {iconFilter};">
     </div>
     {#if type === "text"}
         <input {pattern} maxlength={maxLength} class="input" spellcheck="false" type="text" placeholder={title} bind:value={value} autocomplete="off">
@@ -22,40 +27,55 @@
 </div>
 
 <style lang="scss">
-
   .icon-text-input {
-    display: grid;
-    grid-template-columns: max-content 1fr max-content;
+    display: flex;
+    background: var(--clickgui-base-color);
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+
+    &:focus-within {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--accent-color) 40%, transparent);
+
+        .icon { background-color: var(--accent-color); }
+        .icon img { filter: brightness(0) invert(1); }
+    }
   }
 
   .icon {
-    height: 64px;
-    width: 64px;
-    background-color: var(--menu-input-icon-background-color);
+    width: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 5px 0 0 5px;
+    background-color: var(--clickgui-window-background-color);
+    transition: all 0.4s ease;
+
+    img {
+        width: 20px;
+        height: 20px;
+        opacity: 0.8;
+        transition: all 0.4s ease;
+    }
   }
 
   .input {
-    color: var(--menu-text-color);
-    font-family: "Inter", sans-serif;
-    font-size: 20px;
-    background-color: var(--menu-input-background-color);
+    flex: 1;
+    color: var(--clickgui-text-color);
+    font-size: 16px;
+    background-color: transparent;
     border: none;
-    padding: 0 20px 0 18px;
-    border-radius: 0 5px 5px 0;
-    border-left: solid 2px var(--menu-input-divider-color);
-    width: 100%;
+    padding: 16px 12px;
+    outline: none;
 
-    &:invalid {
-      border: solid 2px var(--menu-input-error-border-color);
-    }
+    &::placeholder { color: var(--clickgui-text-dimmed-color); }
+    &:invalid { color: var(--error-color); }
   }
 
   .button-container {
     display: flex;
     align-items: center;
+    padding-right: 8px;
   }
 </style>

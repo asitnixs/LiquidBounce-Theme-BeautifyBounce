@@ -116,46 +116,48 @@
     });
 </script>
 
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+
 <DirectLoginModal bind:visible={directLoginModalVisible}/>
 <AddAccountModal bind:visible={addAccountModalVisible}/>
 <Menu>
-    <OptionBar>
-        <Search on:search={handleSearch}/>
-        <SwitchSetting title="Premium Only" bind:value={premiumOnly}/>
-        <SwitchSetting title="Favorites Only" bind:value={favoritesOnly}/>
-        <MultiSelect title="Account Type" options={["Mojang", "TheAltening"]} bind:values={accountTypes}/>
-    </OptionBar>
+    <div class="compact-layout">
+        <OptionBar>
+            <Search on:search={handleSearch}/>
+        </OptionBar>
 
-    <MenuList sortable={accounts.length === renderedAccounts.length} elementCount={accounts.length}
-              on:sort={handleAccountSort}>
-        {#key accounts}
-            {#each renderedAccounts as account}
-                <MenuListItem
-                        image={account.avatar}
-                        title={account.username}
-                        favorite={account.favorite}
-                        on:dblclick={() => loginToAccount(account.id)}>
-                    <svelte:fragment slot="subtitle">
-                        <pre class="uuid">{account.uuid}</pre>
-                    </svelte:fragment>
+        <MenuList sortable={accounts.length === renderedAccounts.length} elementCount={accounts.length}
+                on:sort={handleAccountSort}>
+            {#key accounts}
+                {#each renderedAccounts as account}
+                    <MenuListItem
+                            image={account.avatar}
+                            title={account.username}
+                            favorite={account.favorite}
+                            on:dblclick={() => loginToAccount(account.id)}>
+                        <svelte:fragment slot="subtitle">
+                            <pre class="uuid">{account.uuid}</pre>
+                        </svelte:fragment>
 
-                    <svelte:fragment slot="tag">
-                        <MenuListItemTag text={account.type}/>
-                    </svelte:fragment>
+                        <svelte:fragment slot="tag">
+                            <MenuListItemTag text={account.type}/>
+                        </svelte:fragment>
 
-                    <svelte:fragment slot="active-visible">
-                        <MenuListItemButton title="Delete" icon="trash" on:click={() => removeAccount(account.id)}/>
-                        <MenuListItemButton title="Favorite" icon={account.favorite ? "favorite-filled" : "favorite" }
-                                            on:click={() => toggleFavorite(account.id, !account.favorite)}/>
-                    </svelte:fragment>
+                        <svelte:fragment slot="active-visible">
+                            <MenuListItemButton title="Delete" icon="trash" on:click={() => removeAccount(account.id)}/>
+                            <MenuListItemButton title="Favorite" icon={account.favorite ? "favorite-filled" : "favorite" }
+                                                on:click={() => toggleFavorite(account.id, !account.favorite)}/>
+                        </svelte:fragment>
 
-                    <svelte:fragment slot="always-visible">
-                        <MenuListItemButton title="Login" icon="play" on:click={() => loginToAccount(account.id)}/>
-                    </svelte:fragment>
-                </MenuListItem>
-            {/each}
-        {/key}
-    </MenuList>
+                        <svelte:fragment slot="always-visible">
+                            <MenuListItemButton title="Login" icon="play" on:click={() => loginToAccount(account.id)}/>
+                        </svelte:fragment>
+                    </MenuListItem>
+                {/each}
+            {/key}
+        </MenuList>
+    </div>
 
     <BottomButtonWrapper>
         <ButtonContainer>
@@ -175,5 +177,33 @@
 <style lang="scss">
   .uuid {
     font-family: monospace;
+  }
+
+    .compact-layout {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+
+  .bg-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('backgrounds/background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -2;
+  }
+
+  .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.35) 100%);
+      backdrop-filter: blur(4px);
+      z-index: -1;
   }
 </style>

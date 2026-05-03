@@ -17,40 +17,37 @@
 </label>
 
 <style lang="scss">
-
   .switch-setting {
     display: flex;
     align-items: center;
     cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 12px;
   }
 
   .title {
-    color: var(--menu-text-color);
-    font-size: 20px;
+    color: var(--clickgui-text-color);
+    font-size: 16px;
     margin-left: 10px;
     font-weight: 500;
   }
 
   .slider {
     position: absolute;
-    top: 2px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--menu-switch-track-color);
-    transition: ease 0.4s;
-    height: 14px;
-    border-radius: 10px;
+    inset: 0;
+    background: var(--clickgui-switch-track-color);
+    transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    border-radius: 12px;
 
     &::before {
       position: absolute;
       content: "";
-      height: 21px;
-      width: 21px;
-      top: -4px;
-      left: -10px;
-      background-color: var(--menu-switch-thumb-color);
-      transition: ease 0.4s;
+      height: 18px;
+      width: 18px;
+      top: 3px;
+      left: 3px;
+      background-color: #ffffff;
+      transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
       border-radius: 50%;
     }
   }
@@ -58,22 +55,19 @@
   .switch {
     position: relative;
     display: flex;
-    width: 28px;
-    height: 18px;
+    width: 44px;
+    height: 24px;
     align-items: center;
-    margin: 0 10px;
 
-    input {
-      display: none;
-    }
+    input { display: none; }
 
     input:checked + .slider {
-      background-color: var(--menu-switch-track-active-color);
+      background-color: var(--accent-color);
     }
 
-    input:checked + .slider:before {
-      transform: translateX(27px);
-      background-color: var(--menu-switch-thumb-active-color);
+    input:checked + .slider::before {
+      transform: translateX(20px);
+      background: rgb(255, 255, 255);
     }
   }
 </style>

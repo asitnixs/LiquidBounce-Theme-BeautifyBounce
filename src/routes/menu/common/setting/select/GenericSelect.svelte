@@ -1,6 +1,6 @@
 <script lang="ts">
     import {quintOut} from "svelte/easing";
-    import {fade} from "svelte/transition";
+    import {fade, slide} from "svelte/transition";
 
     export let closeOnInternalClick: boolean;
 
@@ -9,7 +9,7 @@
     let headerElement: HTMLElement;
 
     function handleWindowClick(e: MouseEvent) {
-        if (!selectElement.contains(e.target as Node)) {
+        if (selectElement && !selectElement.contains(e.target as Node)) {
             expanded = false;
         }
     }
@@ -36,53 +36,83 @@
         <span class="title">
             <slot name="title"/>
         </span>
-        <img src="img/menu/icon-select-arrow.svg" alt="expand">
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
     </div>
     {#if expanded}
-        <div class="options" transition:fade|global={{ duration: 200, easing: quintOut }}>
-            <slot name="options"></slot>
+        <div class="options-wrapper" transition:slide|global={{ duration: 200, easing: quintOut }}>
+            <div class="options">
+                <slot name="options"></slot>
+            </div>
         </div>
     {/if}
 </div>
 
 <style lang="scss">
-
   .select {
     cursor: pointer;
     min-width: 250px;
     position: relative;
-
-    &.expanded {
-      .header {
-        border-radius: 5px 5px 0 0;
-      }
-    }
+    user-select: none;
   }
 
   .header {
-    background-color: var(--menu-select-header-background-color);
+    background: var(--clickgui-base-color);
+    border: 1px solid var(--clickgui-border-color);
     padding: 20px;
     display: flex;
     column-gap: 20px;
     align-items: center;
     justify-content: space-between;
-    border-radius: 5px;
-    transition: ease border-radius .2s;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+
+    &:hover {
+        background: var(--clickgui-window-background-color);
+    }
 
     .title {
-      color: var(--menu-text-color);
-      font-size: 20px;
+      color: var(--clickgui-text-color);
+      font-size: 16px;
       font-weight: 500;
+    }
+
+    .chevron {
+        width: 18px;
+        height: 18px;
+        color: var(--clickgui-text-dimmed-color);
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
   }
 
-  .options {
+  .expanded .header {
+    border-color: var(--accent-color);
+    
+    .chevron {
+        transform: rotate(-180deg);
+    }
+  }
+
+  .options-wrapper {
     position: absolute;
     z-index: 1000;
     width: 100%;
-    border-radius: 0 0 5px 5px;
-    max-height: 250px;
-    overflow: auto;
-    background-color: var(--menu-select-options-background-color);
+    top: calc(100% + 6px);
+  }
+
+  .options {
+    background: var(--clickgui-base-color);
+    border: 1px solid var(--clickgui-border-color);
+    border-radius: 14px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 8px; }
   }
 </style>

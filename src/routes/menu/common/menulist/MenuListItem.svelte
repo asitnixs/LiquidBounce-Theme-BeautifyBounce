@@ -9,7 +9,6 @@
     export let favorite = false;
 
     const dispatch = createEventDispatcher();
-
     let previewImageLoaded = false;
 </script>
 
@@ -19,7 +18,7 @@
     <div class="image">
         {#if !previewImageLoaded}
             <div class="loader">
-                <RippleLoader />
+                <RippleLoader size={44} />
             </div>
         {/if}
         <img class="preview" on:load={() => previewImageLoaded = true} src={image} alt="preview">
@@ -29,13 +28,17 @@
             <img class="favorite-mark" src="img/menu/icon-favorite-mark.svg" alt="fav">
         {/if}
     </div>
-    <div class="title">
-        <span class="text">{title}</span>
-        <slot name="tag"/>
+    
+    <div class="content-wrap">
+        <div class="title">
+            <span class="text">{title}</span>
+            <slot name="tag"/>
+        </div>
+        <div class="subtitle">
+            <slot name="subtitle"/>
+        </div>
     </div>
-    <div class="subtitle">
-        <slot name="subtitle"/>
-    </div>
+
     <div class="buttons">
         <div class="active">
             <slot name="active-visible"/>
@@ -46,37 +49,29 @@
 </div>
 
 <style lang="scss">
-
   .menu-list-item {
-    display: grid;
-    grid-template-areas:
-        "a b c"
-        "a d c";
-    grid-template-columns: max-content 1fr max-content;
-    background-color: var(--menu-list-item-background-color);
-    padding: 15px 25px;
-    column-gap: 15px;
-    border-radius: 5px;
-    transition: ease background-color .2s;
+    display: flex;
     align-items: center;
+    background: var(--clickgui-base-color);
+    padding: 12px 18px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     cursor: grab;
 
     &:hover {
-      background-color: var(--menu-list-item-hover-background-color);
-
-      .subtitle {
-        color: var(--menu-list-item-hover-subtitle-color);
-      }
+      background: var(--clickgui-window-background-color);
 
       .buttons .active {
         opacity: 1;
+        transform: translateX(0);
       }
     }
   }
 
   .image {
-    grid-area: a;
     position: relative;
+    margin-right: 10px;
 
     .loader {
       position: absolute;
@@ -86,63 +81,73 @@
     }
 
     .preview {
-      height: 68px;
-      width: 68px;
-      border-radius: 50%;
-      image-rendering: pixelated;
+      height: 56px;
+      width: 56px;
+      border-radius: 12px;
     }
 
     .favorite-mark {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: -6px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
     }
 
     .text {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
       display: none;
-      color: var(--menu-text-color);
+      color: var(--clickgui-text-color);
       font-size: 12px;
-      padding: 3px 10px;
-      border-radius: 20px;
+      font-weight: 500;
+      padding: 2px 4px;
+      border-radius: 6px;
+      white-space: nowrap;
 
-      &.visible {
-        display: block;
-      }
+      &.visible { display: block; }
     }
   }
 
+  .content-wrap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 4px;
+    min-width: 0;
+  }
+
   .title {
-    grid-area: b;
-    align-self: flex-end;
     display: flex;
     align-items: center;
 
     .text {
-      font-size: 20px;
-      color: var(--menu-text-color);
-      font-weight: 600;
+      font-size: 18px;
+      color: var(--clickgui-text-color);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
   .subtitle {
-    grid-area: d;
-    font-size: 18px;
-    color: var(--menu-text-dimmed-color);
-    transition: ease color .2s;
-    align-self: flex-start;
+    font-size: 14px;
+    color: var(--clickgui-text-dimmed-color);
+    transition: ease color 0.4s;
   }
 
   .buttons {
-    grid-area: c;
     display: flex;
+    align-items: center;
 
     .active {
-      margin-right: 20px;
+      display: flex;
       opacity: 0;
-      transition: ease opacity .2s;
+      transform: translateX(10px);
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
   }
 </style>

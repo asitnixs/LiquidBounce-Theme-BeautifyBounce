@@ -4,7 +4,8 @@
     import Tabs from "./tabs/Tabs.svelte";
     import {gridSize, os, scaleFactor, showGrid, snappingEnabled} from "./clickgui_store";
     import type {ConfigurableSetting, TogglableSetting} from "../../integration/types";
-    import {onMount} from "svelte";
+    import {onMount, onDestroy} from "svelte";
+    import { applyClickGuiTheme, resetClickGuiTheme, getSavedTheme } from "../../theme/clickgui_theme";
     import {getClientInfo, getGameWindow, getModuleSettings, setTyping} from "../../integration/rest";
     import {listen} from "../../integration/ws";
     import type {ClickGuiValueChangeEvent, ScaleFactorChangeEvent} from "../../integration/events";
@@ -55,6 +56,9 @@
     listen("clickGuiValueChange", (e: ClickGuiValueChangeEvent) => {
         applyValues(e.configurable);
     });
+
+    applyClickGuiTheme(getSavedTheme());
+
 </script>
 
 <div

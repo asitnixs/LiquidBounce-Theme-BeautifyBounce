@@ -7,14 +7,14 @@
 </div>
 
 <style lang="scss">
-
     .option-bar {
-      background-color: var(--menu-button-container-background-color);
-      padding: 15px 30px;
+      background: color-mix(in srgb, var(--clickgui-base-color) 90%, transparent);
+      padding: 12px 18px;
       display: flex;
-      border-radius: 5px;
+      border-radius: 14px;
       align-items: center;
-      column-gap: 30px;
-      margin-bottom: 25px;
+      column-gap: 20px;
+      margin-bottom: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 </style>

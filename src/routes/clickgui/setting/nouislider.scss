@@ -1,27 +1,29 @@
+.noUi-target {
+    margin: 0;
+    height: 6px;
+    border: none;
+    background-color: var(--clickgui-slider-track-color);
+    box-shadow: none;
+    border-radius: 14px;
+}
+
+.noUi-connect {
+    background-color: var(--accent-color);
+    border-radius: 14px;
+}
 
 .noUi-handle {
-    background-color: var(--clickgui-slider-handle-color);
-    box-shadow: unset;
-    border: none;
+    background-color: #ffffff !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+    border: none !important;
     border-radius: 50%;
     height: 12px !important;
     width: 12px !important;
-    transform: translate(-5px, 1px);
+    top: -3px !important;
+    right: -6px !important;
 }
 
 .noUi-handle::after,
 .noUi-handle::before {
     display: none;
-}
-
-.noUi-target {
-    margin: 10px 0;
-    height: 2px;
-    border: none;
-    background-color: var(--clickgui-slider-track-color);
-    box-shadow: unset;
-}
-
-.noUi-connect {
-    background-color: var(--clickgui-slider-fill-color);
 }

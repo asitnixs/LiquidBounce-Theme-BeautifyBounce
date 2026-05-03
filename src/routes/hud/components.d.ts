@@ -33,10 +33,6 @@ interface HudInventoryStatisticsSettings {
     rowLength: number;
 }
 
-interface HudBlockCounterSettings {
-    iconPosition: "None" | "Left" | "Right" | "Top" | "Bottom";
-}
-
 interface HudScoreboardSettings {
     show: ("Header" | "Name" | "Score")[];
 }

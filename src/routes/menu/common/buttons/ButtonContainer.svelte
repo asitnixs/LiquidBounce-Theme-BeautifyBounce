@@ -3,13 +3,14 @@
 </div>
 
 <style lang="scss">
-
     .button-container {
-      background-color: var(--menu-button-container-background-color);
-      padding: 15px 30px;
+      background: color-mix(in srgb, var(--clickgui-base-color) 90%, transparent);
+      padding: 10px 12px;
       width: max-content;
-      border-radius: 5px;
+      border-radius: 14px;
       display: flex;
-      column-gap: 20px;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 </style>

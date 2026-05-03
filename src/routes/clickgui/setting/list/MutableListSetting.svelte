@@ -4,39 +4,29 @@
     import {createEventDispatcher} from "svelte";
 
     export let setting: ModuleSetting;
-
     const cSetting = setting as ListSetting;
-
     const dispatch = createEventDispatcher();
 
-    function handleChange() {
-        setting = {...cSetting};
-        dispatch("change");
-    }
-
-    function removeValueIndex(index: number) {
-        cSetting.value.splice(index, 1);
-        cSetting.value = cSetting.value;
-        handleChange();
-    }
-
-    function addValueIndex() {
-        cSetting.value = ["", ...cSetting.value];
-        handleChange();
-    }
+    function handleChange() { setting = {...cSetting}; dispatch("change"); }
+    function removeValueIndex(index: number) { cSetting.value.splice(index, 1); cSetting.value = cSetting.value; handleChange(); }
+    function addValueIndex() { cSetting.value = ["", ...cSetting.value]; handleChange(); }
 </script>
 
-<div class="setting">
-    <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
-    <button class="button-add" on:click={addValueIndex}>Add value</button>
+<div class="setting-group">
+    <div class="head">
+        <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
+        <button class="add-btn" on:click={addValueIndex} title="Add value">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+    </div>
+
     {#if cSetting.value.length > 0}
         <div class="inputs">
             {#each cSetting.value as _, index}
                 <div class="input-wrapper">
-                    <input type="text" class="value" spellcheck="false" placeholder={setting.name} bind:value={cSetting.value[index]}
-                           on:input={handleChange}>
-                    <button class="button-remove" title="Remove" on:click={() => removeValueIndex(index)}>
-                        <img src="img/clickgui/icon-cross.svg" alt="remove">
+                    <input type="text" class="value-input" spellcheck="false" placeholder="Value..." bind:value={cSetting.value[index]} on:input={handleChange}>
+                    <button class="remove-btn" title="Remove" on:click={() => removeValueIndex(index)}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
                 </div>
             {/each}
@@ -45,69 +35,97 @@
 </div>
 
 <style lang="scss">
-
-  .input-wrapper {
-    display: grid;
-    grid-template-columns: 1fr max-content;
-    column-gap: 5px;
-    align-items: center;
-  }
-
-  .button-remove {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  .setting {
-    padding: 7px 0px;
-  }
-
-  .inputs {
+  .setting-group {
+    padding: 6px 0;
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
-    margin-top: 5px;
+    gap: 8px;
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .name {
     font-weight: 500;
     color: var(--clickgui-text-color);
     font-size: 12px;
-    margin-bottom: 5px;
   }
 
-  .button-add {
-    font-family: monospace;
-    font-size: 12px;
-    color: var(--clickgui-text-color);
-    background-color: var(--clickgui-button-background-color);
-    border: none;
-    padding: 6px 10px;
-    border-radius: 3px;
-    width: 100%;
+  .add-btn {
+    all: unset;
     cursor: pointer;
-    transition: ease background-color .2s;
+    background: transparent;
+    border-radius: 8px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clickgui-text-color);
+    transition: all 0.4s;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
 
     &:hover {
-        background-color: var(--clickgui-button-hover-background-color);
+      background: color-mix(in srgb, var(--accent-color) 40%, transparent);
     }
   }
 
-  .value {
-    width: 100%;
-    background-color: var(--clickgui-input-background-color);
-    font-family: monospace;
-    font-size: 12px;
-    color: var(--clickgui-text-color);
-    border: none;
-    border-bottom: solid 2px var(--clickgui-input-border-color);
-    padding: 6px;
-    border-radius: 3px;
-    transition: ease border-color .2s;
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
 
-    &::-webkit-scrollbar {
-      background-color: transparent;
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .value-input {
+    flex: 1;
+    background: var(--clickgui-window-background-color);
+    border: 1px solid var(--clickgui-border-color);
+    color: var(--clickgui-text-color);
+    font-size: 12px;
+    font-weight: 400;
+    padding: 6px 8px;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.4s;
+
+    &:focus {
+      border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
+  }
+
+  .remove-btn {
+    all: unset;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clickgui-text-color);
+    background: transparent;
+    border-radius: 8px;
+    transition: all 0.4s;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--accent-color) 40%, transparent);
     }
   }
 </style>

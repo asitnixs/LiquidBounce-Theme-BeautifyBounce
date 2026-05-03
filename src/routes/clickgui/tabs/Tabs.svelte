@@ -43,34 +43,34 @@
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 5px;
+    gap: 6px;
     padding: 6px;
-    border-radius: 999px;
-    background-color: var(--clickgui-tabs-background-color);
-    box-shadow: 0 0 10px var(--clickgui-tabs-shadow-color);
+    border-radius: 14px;
+    background-color: var(--clickgui-base-color);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     z-index: 9999999999;
   }
 
   .tab-button {
     background: transparent;
     color: var(--clickgui-text-dimmed-color);
-    padding: 6px 14px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 10px;
     cursor: pointer;
-    transition: ease background-color 0.2s, ease color 0.2s;
+    transition: ease background-color 0.4s, ease color 0.4s;
     border: solid 1px transparent;
 
     &:hover {
       color: var(--clickgui-text-color);
-      background-color: var(--clickgui-tab-hover-background-color);
+      background-color: var(--clickgui-window-background-color);
     }
 
     &.active {
       color: var(--clickgui-text-color);
-      background-color: var(--clickgui-tab-active-background-color);
-      border: 1px solid var(--clickgui-tab-active-border-color);
+      background-color: var(--clickgui-window-background-color);
+      border: 1px solid var(--accent-color);
     }
   }
 </style>

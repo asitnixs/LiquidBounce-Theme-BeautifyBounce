@@ -1,29 +1,29 @@
 @use "colors.scss";
 
 @font-face {
-    font-family: "Inter";
-    src: url("/fonts/Inter-Bold.ttf") format("truetype");
+    font-family: "SFPro";
+    src: url("/fonts/SF/SF-Pro-Text-Bold.otf") format("truetype");
     font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "Inter";
-    src: url("/fonts/Inter-Medium.ttf") format("truetype");
+    font-family: "SFPro";
+    src: url("/fonts/SF/SF-Pro-Text-Medium.otf") format("truetype");
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "Inter";
-    src: url("/fonts/Inter-Regular.ttf") format("truetype");
+    font-family: "SFPro";
+    src: url("/fonts/SF/SF-Pro-Text-Regular.otf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "Inter";
-    src: url("/fonts/Inter-Light.ttf") format("truetype");
+    font-family: "SFPro";
+    src: url("/fonts/SF/SF-Pro-Text-Light.otf") format("truetype");
     font-weight: 300;
     font-style: normal;
 }
@@ -39,9 +39,13 @@
 }
 
 body {
-    font-family: "Inter", sans-serif;
+    font-family: "SFPro", sans-serif; 
     user-select: none;
     overflow: hidden;
+}
+
+input, button, textarea, select {
+    font-family: inherit;
 }
 
 
@@ -50,10 +54,10 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: var(--accent-color);
-    border-radius: 10px;
+    border-radius: 8px;
 }

@@ -1,51 +1,59 @@
 <script lang="ts">
     import type {ItemStack} from "../../../../integration/types";
     import {itemTextureUrl} from "../../../../integration/rest";
+    import {mapToColor} from "../../../../util/color_utils";
 
     export let itemStack: ItemStack;
 
-    let damage = Math.ceil(10 - (itemStack.damage / itemStack.maxDamage * 10));
-    $: damage = Math.ceil(10 - (itemStack.damage / itemStack.maxDamage * 10));
+    $: hasDurability = itemStack.maxDamage && itemStack.maxDamage > 0;
+    
+    $: durabilityPercent = hasDurability 
+        ? Math.max(0, Math.min(100, 100 * (itemStack.maxDamage - itemStack.damage) / itemStack.maxDamage)) 
+        : 0;
+        
+    $: color = hasDurability 
+        ? mapToColor(120 * (itemStack.maxDamage - itemStack.damage) / itemStack.maxDamage) 
+        : "transparent";
 </script>
 
 <div class="armor-status">
+        {#if itemStack!.enchantments && Object.keys(itemStack!.enchantments).length > 0}
+            <div class="mask" style="mask-image: url({itemTextureUrl(itemStack!.identifier)})"></div>
+        {/if}
     <img class="icon" src={itemTextureUrl(itemStack.identifier)} alt={itemStack.identifier} />
-    <div class="durability">
-        {#each Array.from({ length: 10 }, (x, i) => 10 - i) as index}
-            <div class="point" class:active={index <= damage}></div>
-        {/each}
-    </div>
+    
+    {#if hasDurability}
+        <div class="durability-bar">
+            <div class="durability-fill" style="width: {durabilityPercent}%; background-color: {color};"></div>
+        </div>
+    {/if}
 </div>
 
 <style lang="scss">
-
     .armor-status {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        column-gap: 5px;
+        gap: 2px;
     }
 
     .icon {
-        height: 30px;
-        width: 30px;
-        image-rendering: pixelated;
+        height: 18px;
+        width: 18px;
+        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
     }
 
-    .durability {
-        display: flex;
-        flex-direction: column;
-        row-gap: 1px;
+    .durability-bar {
+        width: 20px;
+        height: 4px;
+        background-color: var(--clickgui-base-color);
+        border-radius: 4px;
+        overflow: hidden;
+    }
 
-        .point {
-            background-color: var(--targethud-armor-point-background-color);
-            height: 3px;
-            width: 5px;
-            border-radius: 1px;
-            transition: ease background-color 0.7s;
-
-            &.active {
-                background-color: var(--targethud-armor-point-active-color);
-            }
-        }
+    .durability-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.4s ease;
     }
 </style>

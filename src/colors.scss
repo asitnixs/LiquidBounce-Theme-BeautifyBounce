@@ -1,12 +1,12 @@
 :root {
     /* Foundation */
-    --surface-color: #000000;
+    --surface-color: #00000000;
     --text-color: #ffffff;
     --text-dimmed-color: #d3d3d3;
 
     --accent-color: #4677ff;
     --accent-hover-color: color-mix(in srgb, var(--accent-color) 82%, black);
-    --accent-subtle-background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+    --accent-subtle-background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
 
     --success-color: #4dac68;
     --error-color: #fc4130;
@@ -278,4 +278,181 @@
     --confetti-color-6: #8ad9ff;
     --confetti-color-7: #ff8fab;
     --confetti-shadow-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ======= CLICKGUI THEMES ======= */
+.clickgui-theme-dark {
+    --surface-color:              #131419 !important;
+    --text-color:                 #f5f7fb !important;
+    --text-dimmed-color:          #c7cfde !important;
+
+    --clickgui-border-color: #27272A;
+    --clickgui-modulecard-box-shadow-color: rgba(0, 0, 0, 0.5);
+    
+    --clickgui-base-color: var(--surface-color);
+    --clickgui-text-color: var(--text-color);
+    --clickgui-text-dimmed-color: var(--text-dimmed-color);
+
+    --clickgui-base-30-color: rgba(255, 255, 255, 0.03);
+    --clickgui-base-36-color: rgba(255, 255, 255, 0.05);
+    --clickgui-base-50-color: rgba(255, 255, 255, 0.08);  
+    --clickgui-base-60-color: rgba(255, 255, 255, 0.1);
+    --clickgui-base-70-color: rgba(255, 255, 255, 0.15);
+    
+    --clickgui-base-80-color: #18181B;
+    --clickgui-base-85-color: #27272A;
+    --clickgui-base-90-color: #09090B;
+
+    --clickgui-description-background-color: #18181B;
+    --clickgui-description-shadow-color: rgba(0, 0, 0, 0.6);
+    --clickgui-description-arrow-color: #18181B;
+
+    --clickgui-overlay-background-color: rgba(0, 0, 0, 0.7);
+    --clickgui-panel-shadow-color: rgba(0, 0, 0, 0.5);
+    --clickgui-panel-header-background-color: #09090B;
+    --clickgui-panel-header-border-color: var(--accent-color);
+    --clickgui-panel-body-background-color: #18181B;
+    --clickgui-panel-toggle-icon-color: var(--clickgui-text-color);
+
+    --clickgui-module-hover-background-color: var(--clickgui-base-36-color);
+    --clickgui-module-highlight-color: var(--accent-color);
+    --clickgui-module-enabled-color: var(--accent-color);
+    --clickgui-module-settings-background-color: rgba(0, 0, 0, 0.25);
+    --clickgui-module-settings-border-color: var(--accent-color);
+
+    --clickgui-search-background-color: #09090B;
+    --clickgui-search-shadow-color: rgba(0, 0, 0, 0.5);
+    --clickgui-search-border-color: var(--accent-color);
+    --clickgui-search-enabled-color: var(--accent-color);
+    --clickgui-search-alias-color: #6B7280;
+    --clickgui-search-hint-color: #9CA3AF;
+
+    --clickgui-tabs-background-color: #1a1c23;
+    --clickgui-tabs-shadow-color: rgba(0, 0, 0, 0.5);
+    --clickgui-tab-hover-background-color: var(--clickgui-base-36-color);
+    --clickgui-tab-active-background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+    --clickgui-tab-active-border-color: var(--accent-color);
+
+    --clickgui-window-background-color: #1a1c23;
+    --clickgui-window-shadow-color: rgba(0, 0, 0, 0.6);
+    --clickgui-window-header-background-color: #09090B;
+    --clickgui-window-header-border-color: var(--accent-color);
+
+    --clickgui-global-settings-divider-color: rgba(255, 255, 255, 0.1);
+    --clickgui-input-background-color: var(--clickgui-base-36-color);
+    --clickgui-input-border-color: var(--accent-color);
+    --clickgui-button-background-color: var(--accent-color);
+    --clickgui-button-hover-background-color: var(--accent-hover-color);
+    --clickgui-setting-group-border-color: var(--accent-color);
+    --clickgui-dropdown-trigger-background-color: var(--clickgui-button-background-color);
+    --clickgui-dropdown-background-color: #27272A;
+    --clickgui-dropdown-border-color: var(--accent-color);
+    --clickgui-dropdown-option-color: #9CA3AF;
+    --clickgui-dropdown-option-hover-color: #FFFFFF;
+    --clickgui-dropdown-option-selected-color: var(--accent-color);
+    --clickgui-selection-chip-background-color: var(--clickgui-base-36-color);
+    --clickgui-selection-chip-color: #9CA3AF;
+    --clickgui-selection-chip-selected-background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+    --clickgui-selection-chip-selected-color: var(--accent-color);
+    --clickgui-selection-chip-remove-background-color: rgba(239, 68, 68, 0.15);
+    --clickgui-selection-chip-remove-color: #EF4444;
+    --clickgui-switch-track-color: #3F3F46;
+    --clickgui-switch-thumb-color: #A1A1AA;
+    --clickgui-switch-track-active-color: color-mix(in srgb, var(--accent-color) 35%, #18181B);
+    --clickgui-switch-thumb-active-color: var(--accent-color);
+    --clickgui-slider-track-color: #3F3F46;
+    --clickgui-slider-handle-color: var(--accent-color);
+    --clickgui-slider-fill-color: var(--accent-color);
+    --clickgui-color-picker-border-color: var(--accent-color);
+    --clickgui-curve-accent-color: var(--accent-color);
+    --clickgui-curve-grid-color: rgba(255, 255, 255, 0.05);
+    --clickgui-curve-axis-color: #9CA3AF;
+}
+
+.clickgui-theme-light {
+    --surface-color:              #ffffff !important;
+    --text-color:                 #1c1718 !important;
+    --text-dimmed-color:          #52525c !important;
+
+    --clickgui-border-color: #E5E7EB;
+    --clickgui-modulecard-box-shadow-color: rgba(0, 0, 0, 0.25);
+
+    --clickgui-base-color: var(--surface-color);
+    --clickgui-text-color: var(--text-color);
+    --clickgui-text-dimmed-color: var(--text-dimmed-color);
+
+    --clickgui-base-30-color: rgba(0, 0, 0, 0.03);
+    --clickgui-base-36-color: rgba(0, 0, 0, 0.05);
+    --clickgui-base-50-color: rgba(0, 0, 0, 0.08);
+    --clickgui-base-60-color: rgba(0, 0, 0, 0.1);
+    --clickgui-base-70-color: rgba(0, 0, 0, 0.15);
+    
+    --clickgui-base-80-color: #FFFFFF;
+    --clickgui-base-85-color: #F9FAFB;
+    --clickgui-base-90-color: #F3F4F6;
+
+    --clickgui-description-background-color: #FFFFFF;
+    --clickgui-description-shadow-color: rgba(0, 0, 0, 0.15);
+    --clickgui-description-arrow-color: #FFFFFF;
+
+    --clickgui-overlay-background-color: rgba(0, 0, 0, 0.4);
+    --clickgui-panel-shadow-color: rgba(0, 0, 0, 0.1);
+    --clickgui-panel-header-background-color: #F3F4F6;
+    --clickgui-panel-header-border-color: var(--accent-color);
+    --clickgui-panel-body-background-color: #FFFFFF;
+    --clickgui-panel-toggle-icon-color: var(--clickgui-text-color);
+
+    --clickgui-module-hover-background-color: var(--clickgui-base-36-color);
+    --clickgui-module-highlight-color: var(--accent-color);
+    --clickgui-module-enabled-color: var(--accent-color);
+    --clickgui-module-settings-background-color: #F9FAFB;
+    --clickgui-module-settings-border-color: var(--accent-color);
+
+    --clickgui-search-background-color: #FFFFFF;
+    --clickgui-search-shadow-color: rgba(0, 0, 0, 0.15);
+    --clickgui-search-border-color: var(--accent-color);
+    --clickgui-search-enabled-color: var(--accent-color);
+    --clickgui-search-alias-color: #9CA3AF;
+    --clickgui-search-hint-color: #6B7280;
+
+    --clickgui-tabs-background-color: #FFFFFF;
+    --clickgui-tabs-shadow-color: rgba(0, 0, 0, 0.1);
+    --clickgui-tab-hover-background-color: rgba(0, 0, 0, 0.04);
+    --clickgui-tab-active-background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+    --clickgui-tab-active-border-color: var(--accent-color);
+
+    --clickgui-window-background-color: #fafafa;
+    --clickgui-window-shadow-color: rgba(0, 0, 0, 0.15);
+    --clickgui-window-header-background-color: #F9FAFB;
+    --clickgui-window-header-border-color: var(--accent-color);
+
+    --clickgui-global-settings-divider-color: rgba(0, 0, 0, 0.1);
+    --clickgui-input-background-color: var(--clickgui-base-36-color);
+    --clickgui-input-border-color: var(--accent-color);
+    --clickgui-button-background-color: var(--accent-color);
+    --clickgui-button-hover-background-color: var(--accent-hover-color);
+    --clickgui-setting-group-border-color: var(--accent-color);
+    --clickgui-dropdown-trigger-background-color: var(--clickgui-button-background-color);
+    --clickgui-dropdown-background-color: #e6e6e6;
+    --clickgui-dropdown-border-color: var(--accent-color);
+    --clickgui-dropdown-option-color: #4B5563;
+    --clickgui-dropdown-option-hover-color: #111827;
+    --clickgui-dropdown-option-selected-color: var(--accent-color);
+    --clickgui-selection-chip-background-color: var(--clickgui-base-36-color);
+    --clickgui-selection-chip-color: #4B5563;
+    --clickgui-selection-chip-selected-background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+    --clickgui-selection-chip-selected-color: var(--accent-color);
+    --clickgui-selection-chip-remove-background-color: rgba(239, 68, 68, 0.15);
+    --clickgui-selection-chip-remove-color: #EF4444;
+    --clickgui-switch-track-color: #D1D5DB;
+    --clickgui-switch-thumb-color: #FFFFFF;
+    --clickgui-switch-track-active-color: color-mix(in srgb, var(--accent-color) 35%, transparent);
+    --clickgui-switch-thumb-active-color: var(--accent-color);
+    --clickgui-slider-track-color: #E5E7EB;
+    --clickgui-slider-handle-color: var(--accent-color);
+    --clickgui-slider-fill-color: var(--accent-color);
+    --clickgui-color-picker-border-color: var(--accent-color);
+    --clickgui-curve-accent-color: var(--accent-color);
+    --clickgui-curve-grid-color: rgba(0, 0, 0, 0.05);
+    --clickgui-curve-axis-color: #6B7280;
 }

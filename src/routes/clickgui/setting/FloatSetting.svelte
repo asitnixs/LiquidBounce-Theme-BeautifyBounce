@@ -54,62 +54,62 @@
     });
 </script>
 
-<div class="setting" class:has-suffix={cSetting.suffix !== ""}>
+<div class="setting">
     <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
-    <div class="value">
-        <ValueInput valueType="float" value={cSetting.value}
-                    on:change={(e) => apiSlider.set(e.detail.value)}/>
+    
+    <div class="slider-container">
+        <div bind:this={slider} class="slider"></div>
     </div>
-    {#if cSetting.suffix !== ""}
-        <div class="suffix">{cSetting.suffix}</div>
-    {/if}
-    <div bind:this={slider} class="slider"></div>
+
+    <div class="value-box">
+        <ValueInput valueType="float" value={cSetting.value} on:change={(e) => apiSlider.set(e.detail.value)}/>
+    </div>
 </div>
 
 <style lang="scss">
-
     .setting {
-        padding: 7px 0 2px 0;
         display: grid;
-        grid-template-areas:
-            "a b"
-            "d d";
-        grid-template-columns: 1fr max-content;
-        column-gap: 5px;
-
-        /* animation fix */
-        min-height: 46px;
-    }
-
-    .setting.has-suffix {
-        grid-template-areas:
-            "a b c"
-            "d d d";
-        grid-template-columns: 1fr max-content max-content;
-    }
-
-    .suffix,
-    .setting {
-        color: var(--clickgui-text-color);
-        font-weight: 500;
-        font-size: 12px;
+        grid-template-columns: 120px 1fr 60px;
+        align-items: center;
+        padding: 4px 0;
+        gap: 8px;
     }
 
     .name {
-        grid-area: a;
+        font-size: 12px;
         font-weight: 500;
+        color: var(--clickgui-text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .value {
-        grid-area: b;
-    }
-
-    .suffix {
-        grid-area: c;
+    .slider-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0 4px;
     }
 
     .slider {
-        grid-area: d;
-        padding-right: 10px;
+        width: 100%;
+    }
+
+    .value-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--clickgui-window-background-color);
+        border: 1px solid var(--clickgui-border-color);
+        border-radius: 8px;
+        padding: 6px 0px;
+        width: 100%;
+    }
+
+    :global(.value-box .value) {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--clickgui-text-color);
+        font-variant-numeric: tabular-nums;
     }
 </style>

@@ -18,13 +18,7 @@
     }>();
 
     function handleInput() {
-        let parsed: number;
-        if (valueType === "float") {
-            parsed = parseFloat(inputValue);
-        } else {
-            parsed = parseInt(inputValue);
-        }
-
+        let parsed = valueType === "float" ? parseFloat(inputValue) : parseInt(inputValue);
         if (!isNaN(parsed)) {
             dispatch("change", {value: parsed});
         }
@@ -33,6 +27,7 @@
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Enter") {
             e.preventDefault();
+            inputElement.blur();
         }
     }
 </script>
@@ -41,15 +36,11 @@
 <span contenteditable="true" class="value" bind:innerText={inputValue} on:input={handleInput} on:keydown={handleKeyDown} bind:this={inputElement}></span>
 
 <style lang="scss">
-
   .value {
-    font-family: monospace;
     color: var(--clickgui-text-color);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
-    background-color: transparent;
-    border: none;
-    min-width: 5px;
     display: inline-block;
+    text-align: center;
   }
 </style>

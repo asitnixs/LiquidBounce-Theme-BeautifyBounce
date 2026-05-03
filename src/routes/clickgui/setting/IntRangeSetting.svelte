@@ -8,10 +8,8 @@
     import {convertToSpacedString, spaceSeperatedNames} from "../../../theme/theme_config";
 
     export let setting: ModuleSetting;
-
-    const dispatch = createEventDispatcher();
-
     const cSetting = setting as IntRangeSetting;
+    const dispatch = createEventDispatcher();
 
     let slider: HTMLElement;
     let apiSlider: API;
@@ -25,10 +23,14 @@
                 max: cSetting.range.to,
             },
             step: 1,
+            format: {
+                to: (value) => Math.round(value),
+                from: (value) => parseInt(value as string, 10),
+            }
         });
 
         apiSlider.on("update", values => {
-            const newValue = values.map(v => v.toString()).map(v => parseInt(v));
+            const newValue = values.map(v => v.toString()).map(v => parseInt(v, 10));
 
             cSetting.value = {
                 from: newValue[0],
@@ -37,72 +39,75 @@
             setting = { ...cSetting };
         });
 
-
-        apiSlider.on("set", () => {
-            dispatch("change");
-        });
+        apiSlider.on("set", () => dispatch("change"));
     });
 </script>
 
-<div class="setting" class:has-suffix={cSetting.suffix !== ""}>
+<div class="setting">
     <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
-    <div class="value">
-        <ValueInput valueType="int" value={cSetting.value.from}
-                    on:change={(e) => apiSlider.set([e.detail.value, cSetting.value.to])}/>
-        -
-        <ValueInput valueType="int" value={cSetting.value.to}
-                    on:change={(e) => apiSlider.set([cSetting.value.from, e.detail.value])}/>
+    
+    <div class="slider-container">
+        <div bind:this={slider} class="slider"></div>
     </div>
-    {#if cSetting.suffix !== ""}
-        <div class="suffix">{cSetting.suffix}</div>
-    {/if}
-    <div bind:this={slider} class="slider"></div>
+
+    <div class="value-box">
+        <ValueInput valueType="int" value={cSetting.value.from} on:change={(e) => apiSlider.set([e.detail.value, cSetting.value.to])}/>
+        <span class="dash">-</span>
+        <ValueInput valueType="int" value={cSetting.value.to} on:change={(e) => apiSlider.set([cSetting.value.from, e.detail.value])}/>
+    </div>
 </div>
 
 <style lang="scss">
-
     .setting {
-        padding: 7px 0 2px 0;
         display: grid;
-        grid-template-areas:
-            "a b"
-            "d d";
-        grid-template-columns: 1fr max-content;
-        column-gap: 5px;
-
-        /* animation fix */
-        min-height: 46px;
+        grid-template-columns: 120px 1fr 100px;
+        align-items: center;
+        padding: 4px 0;
+        gap: 8px;
     }
 
-    .setting.has-suffix {
-        grid-template-areas:
-            "a b c"
-            "d d d";
-        grid-template-columns: 1fr max-content max-content;
-    }
-
-    .suffix,
-    .setting {
+    .name {
+        font-size: 12px;
+        font-weight: 500;
         color: var(--clickgui-text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .slider-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0 4px;
+    }
+
+    .slider {
+        width: 100%;
+    }
+
+    .value-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--clickgui-window-background-color);
+        border: 1px solid var(--clickgui-border-color);
+        border-radius: 8px;
+        padding: 6px 0px;
+        width: 100%;
+        gap: 4px;
+    }
+
+    .dash {
+        color: var(--clickgui-text-dimmed-color);
         font-weight: 500;
         font-size: 12px;
     }
 
-    .name {
-        grid-area: a;
-        font-weight: 500;
-    }
-
-    .value {
-        grid-area: b;
-    }
-
-    .suffix {
-        grid-area: c;
-    }
-
-    .slider {
-        grid-area: d;
-        padding-right: 10px;
+    :global(.value-box .value) {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--clickgui-text-color);
+        font-variant-numeric: tabular-nums;
     }
 </style>
