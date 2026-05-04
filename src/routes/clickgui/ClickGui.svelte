@@ -39,7 +39,6 @@
     let modules = $state<Module[]>([]);
     let categories = $state<GroupedModules>({});
     let categoryNames = $state<string[]>([]);
-    let dashboardEl: HTMLElement;
     
     let activeCategory = $state<string>("");
     let searchQuery = $state<string>("");
@@ -104,29 +103,6 @@
         }
 
         await tick();
-
-        if (dashboardEl) {
-            dashboardEl.animate([
-                {
-                    transform: "scale(0.85) translateY(30px)",
-                    opacity: 0,
-                    filter: "blur(12px)"
-                },
-                {
-                    transform: "scale(1.03) translateY(-5px)",
-                    opacity: 1,
-                    filter: "blur(0px)"
-                },
-                {
-                    transform: "scale(1) translateY(0)",
-                    opacity: 1,
-                    filter: "blur(0px)"
-                }
-            ], {
-                duration: 350,
-                easing: "cubic-bezier(.2,.8,.2,1)"
-            });
-        }
     });
 
     $effect(() => {
@@ -243,44 +219,6 @@
         }
     }
 
-    function guiIntro(node: HTMLElement) {
-        return {
-            duration: 400,
-            easing: cubicOut,
-            css: (t: number) => {
-                const scale = 0.88 + t * 0.12;
-                const y = (1 - t) * 30;
-                const opacity = t;
-                const blur = (1 - t) * 12;
-
-                return `
-                    transform: scale(${scale}) translateY(${y}px);
-                    opacity: ${opacity};
-                    filter: blur(${blur}px);
-                `;
-            }
-        };
-    }
-
-    function guiOutro(node: HTMLElement) {
-        return {
-            duration: 400,
-            easing: cubicIn,
-            css: (t: number) => {
-                const scale = 1 - (1 - t) * 0.1;
-                const y = (1 - t) * 20;
-                const opacity = t;
-                const blur = (1 - t) * 8;
-
-                return `
-                    transform: scale(${scale}) translateY(${y}px);
-                    opacity: ${opacity};
-                    filter: blur(${blur}px);
-                `;
-            }
-        };
-    }
-
     function smoothScroll(node: HTMLElement, resetTrigger?: string) {
         let targetY = node.scrollTop;
         let isAnimating = false;
@@ -330,7 +268,7 @@
 
 <svelte:window onclick={handleWindowClick} onmousemove={handleMouseMove} onmouseup={handleMouseUp} />
 
-<div class="dashboard-gui" bind:this={dashboardEl} in:guiIntro out:guiOutro>
+<div class="dashboard-gui">
     <Description />
 
     <div class="gui-wrapper" style={windowLeft !== null ? `position: absolute; margin: 0; left: ${windowLeft}px; top: ${windowTop}px;` : ''}>
