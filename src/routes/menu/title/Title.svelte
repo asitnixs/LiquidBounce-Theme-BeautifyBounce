@@ -298,7 +298,7 @@
 
     .exit-btn {
         display: flex;
-        align-items: center;
+        justify-self: center;
         gap: 10px;
         background: var(--clickgui-base-color);
         border: 1px solid transparent;
@@ -309,7 +309,7 @@
         font-weight: 500;
         cursor: pointer;
         transition: all 0.4s ease;
-        width: 75%;
+        width: 200px;
 
         svg {
             width: 16px;
