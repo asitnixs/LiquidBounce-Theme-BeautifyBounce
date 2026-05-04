@@ -86,7 +86,7 @@
 <div class="coordinates-info" transition:fade={{ duration: 300 }}>
     {#if showNick && session}
         <div class="value" style="display:flex;align-items:center;gap:4px;">
-            <img class="info-icon" src="img/hud/information/icon-user.svg" alt="user" style="filter: {iconFilter};">
+            <img src="img/hud/information/icon-user.svg" alt="user" style="width:14px; height:14px; flex-shrink:0; filter:{iconFilter};">
             {showUsername ? session.username : protectedName}
         </div>
     {/if}
@@ -97,6 +97,7 @@
 
     {#if showFps}
         <div class="fps-wrap">
+            <img src="img/hud/information/icon-fps.svg" alt="fps" style="width:14px; height:14px; flex-shrink:0; filter:{iconFilter};">
             <span class="value">{dispFps}</span>
             <span class="unit">FPS</span>
         </div>
@@ -142,7 +143,7 @@
 
     .fps-wrap {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         gap: 4px;
     }
 
