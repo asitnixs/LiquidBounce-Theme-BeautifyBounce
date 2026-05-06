@@ -8,37 +8,40 @@
     export let editMode = false;
 
     const HISTORY_SIZE = 50;
+    const TICK_MS = 50;
+
     let history: number[] = new Array(HISTORY_SIZE).fill(0);
-    
     let speed = 0;
     let textSpeed = 0;
-    let tickCounter = 0;
 
+    let lastKnownSpeed = 0;
     let lastX = 0, lastY = 0, lastZ = 0;
     let playerData: PlayerData | null = null;
+    let initialized = false;
 
     listen("clientPlayerData", (event: ClientPlayerDataEvent) => {
         if (editMode) return;
 
-        if (playerData) {
+        const prev = playerData;
+        playerData = event.playerData;
+
+        if (!initialized) {
             lastX = playerData.position.x;
             lastY = playerData.position.y;
             lastZ = playerData.position.z;
+            initialized = true;
+            return;
         }
-        playerData = event.playerData;
-        
+
         const dx = playerData.position.x - lastX;
         const dy = playerData.position.y - lastY;
         const dz = playerData.position.z - lastZ;
-        
-        speed = Math.hypot(dx, dy, dz) * 20;
-        history = [...history.slice(1), speed];
 
-        tickCounter++;
-        if (tickCounter >= 1) {
-            textSpeed = speed;
-            tickCounter = 0;
-        }
+        lastX = playerData.position.x;
+        lastY = playerData.position.y;
+        lastZ = playerData.position.z;
+
+        lastKnownSpeed = Math.hypot(dx, dz) * 20;
     });
 
     onMount(() => {
@@ -48,14 +51,17 @@
                 const newSpeed = 15 + Math.sin(offset * 0.2) * 8 + Math.cos(offset * 0.4) * 4;
                 history = [...history.slice(1), newSpeed];
                 offset++;
-
-                if (offset % 3 === 0) {
-                    textSpeed = newSpeed;
-                }
-            }, 50);
-            
+                if (offset % 3 === 0) textSpeed = newSpeed;
+            }, TICK_MS);
             return () => clearInterval(demoInterval);
         }
+
+        const graphInterval = setInterval(() => {
+            history = [...history.slice(1), lastKnownSpeed];
+            textSpeed = lastKnownSpeed;
+        }, TICK_MS);
+
+        return () => clearInterval(graphInterval);
     });
 
     $: maxBps = Math.max(5, ...history);
@@ -72,11 +78,11 @@
         const dx = (200 / (HISTORY_SIZE - 1)) * 0.35;
 
         for (let i = 0; i < pts.length - 1; i++) {
-            const current = pts[i];
-            const next = pts[i + 1];
-            path += ` C ${(current.x + dx).toFixed(2)} ${current.y.toFixed(2)}, ` +
-                    `${(next.x - dx).toFixed(2)} ${next.y.toFixed(2)}, ` +
-                    `${next.x.toFixed(2)} ${next.y.toFixed(2)}`;
+            const cur = pts[i];
+            const nxt = pts[i + 1];
+            path += ` C ${(cur.x + dx).toFixed(2)} ${cur.y.toFixed(2)}, ` +
+                    `${(nxt.x - dx).toFixed(2)} ${nxt.y.toFixed(2)}, ` +
+                    `${nxt.x.toFixed(2)} ${nxt.y.toFixed(2)}`;
         }
         return path;
     }
