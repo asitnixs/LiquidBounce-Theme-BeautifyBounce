@@ -101,8 +101,7 @@
     
             <div class="info-column">
                 <div class="bars-container">
-                    <HealthProgress maxHealth={target.maxHealth + target.absorption} health={target.actualHealth + target.absorption} />
-
+                    <HealthProgress maxHealth={target.maxHealth} health={target.actualHealth} absorption={target.absorption}/>
                     {#if displayArmor > 0}
                         <div class="armor-progress-bg">
                             <div class="armor-progress-fill" 

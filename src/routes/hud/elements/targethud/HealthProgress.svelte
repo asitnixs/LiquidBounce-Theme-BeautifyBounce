@@ -1,28 +1,44 @@
 <script lang="ts">
     export let maxHealth: number;
     export let health: number;
+    export let absorption: number = 0;
 
-    $: percentage = Math.max(0, Math.min(100, (health / maxHealth) * 100));
+    $: healthPct = Math.max(0, Math.min(100, (health / maxHealth) * 100));
+
+    $: absorptionPct = absorption > 0
+        ? Math.max(0, Math.min(healthPct, (absorption / maxHealth) * 100))
+        : 0;
+
+    $: absorptionLeft = healthPct - absorptionPct;
 
     $: barColor =
-        percentage > 50
+        healthPct > 50
             ? "var(--success-color)"
-            : percentage > 25
+            : healthPct > 25
               ? "var(--warning-color)"
               : "var(--error-color)";
 </script>
 
 <div class="health-progress-wrapper">
     <div class="health-progress-bg">
+
         <div
             class="damage-trail"
-            style="width: {percentage}%; background-color: color-mix(in srgb, {barColor} 40%, transparent);"
+            style="width: {healthPct}%; background-color: color-mix(in srgb, {barColor} 40%, transparent);"
         ></div>
 
         <div
             class="health-progress-fill"
-            style="width: {percentage}%; background-color: {barColor}; box-shadow: 0 0 8px color-mix(in srgb, {barColor} 60%, transparent);"
+            style="width: {healthPct}%; background-color: {barColor}; box-shadow: 0 0 8px color-mix(in srgb, {barColor} 60%, transparent);"
         ></div>
+
+        {#if absorptionPct > 0}
+            <div
+                class="absorption-fill"
+                style="left: {absorptionLeft}%; width: {absorptionPct}%;"
+            ></div>
+        {/if}
+
     </div>
 </div>
 
@@ -61,5 +77,18 @@
         border-radius: 8px;
         transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
         z-index: 2;
+    }
+
+    .absorption-fill {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #f5c518, #ffd700);
+        box-shadow: 0 0 6px rgba(255, 210, 0, 0.6);
+        transition:
+            left  0.15s cubic-bezier(0.4, 0, 0.2, 1),
+            width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 3;
     }
 </style>
