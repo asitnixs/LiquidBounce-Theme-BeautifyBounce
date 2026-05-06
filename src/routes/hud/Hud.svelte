@@ -22,6 +22,7 @@
     import InventoryStatistics from "./elements/inventory/InventoryStatistics.svelte";
     import MotionGraph from "./elements/MotionGraph.svelte";
     import Information from "./elements/Information.svelte";
+    import BedTracker from "./elements/BedTracker.svelte";
 
     let zoom = 100;
     let metadata: Metadata;
@@ -114,6 +115,8 @@
                     <MotionGraph settings={c.settings} />
                 {:else if c.name === "Information"}
                     <Information settings={c.settings} />
+                {:else if c.name === "BedTracker"}
+                    <BedTracker settings={c.settings} />
                 {/if}
             </DraggableComponent>
         {/if}

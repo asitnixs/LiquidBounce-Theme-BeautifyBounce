@@ -24,6 +24,7 @@
     import Information from "../hud/elements/Information.svelte";
     import GenericSetting from "../clickgui/setting/common/GenericSetting.svelte";
     import ClickGuiToolTip from "../clickgui/ClickGuiToolTip.svelte";
+    import BedTracker from "../hud/elements/BedTracker.svelte";
 
     let zoom = 100;
     let metadata: Metadata;
@@ -428,6 +429,8 @@
                         <MotionGraph settings={c.settings} />
                     {:else if c.name === "Information"}
                         <Information settings={c.settings} editMode={true} />
+                    {:else if c.name === "BedTracker"}
+                        <BedTracker settings={c.settings} editMode={true} />
                     {/if}
                 </DraggableComponent>
             {/if}

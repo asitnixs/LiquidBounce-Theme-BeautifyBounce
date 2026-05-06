@@ -1,0 +1,11 @@
+{
+  "name": "BedTracker",
+  "enabled": true,
+  "singleton": true,
+  "alignment": {
+    "horizontalAlignment": "Left",
+    "horizontalOffset": 400,
+    "verticalAlignment": "Top",
+    "verticalOffset": 15
+  }
+}

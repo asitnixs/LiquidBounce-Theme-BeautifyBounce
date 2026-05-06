@@ -44,7 +44,8 @@
     "KeyBinds",
     "MotionGraph",
     "Coordinates",
-    "Information"
+    "Information",
+    "BedTracker"
   ],
   "fonts": [
     "SF-Pro-Text-Bold.ttf",
